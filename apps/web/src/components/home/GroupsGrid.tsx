@@ -63,17 +63,23 @@ export function GroupsGrid({ groups }: { groups: Group[] }) {
 
 function GroupCard({ group }: { group: Group }) {
   const localIcon = SERVICE_ICONS[group.group]
+  const [loaded, setLoaded] = useState(false)
 
   return (
     <Link href={`/services/${encodeURIComponent(group.group)}`} className={s.card}>
       <div className={s.cardGlow} />
 
-      <div className={s.iconWrap}>
-        {localIcon ? (
-          <Image src={localIcon} alt={group.group} width={40} height={40} style={{ objectFit: 'contain' }} />
-        ) : group.icon ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={group.icon} alt={group.group} width={40} height={40} style={{ objectFit: 'contain' }} />
+      <div className={`${s.iconWrap} ${loaded ? s.iconWrapLoaded : ''}`}>
+        {localIcon || group.icon ? (
+          <Image
+            src={localIcon ?? group.icon!}
+            alt={group.group}
+            width={40}
+            height={40}
+            loading="lazy"
+            onLoad={() => setLoaded(true)}
+            style={{ objectFit: 'contain' }}
+          />
         ) : (
           <span className={s.iconFallback}>{group.group[0]}</span>
         )}

@@ -99,12 +99,39 @@
   height: 52px;
   border-radius: 12px;
   overflow: hidden;
-  background: var(--pay-surface-3);
+  background: linear-gradient(
+    90deg,
+    var(--pay-surface-2) 0%,
+    var(--pay-surface-3) 50%,
+    var(--pay-surface-2) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease infinite;
   display: flex;
   align-items: center;
   justify-content: center;
   flex-shrink: 0;
   transition: transform var(--pay-duration-fast) var(--pay-ease);
+}
+
+.iconWrapLoaded {
+  animation: none;
+  background: transparent;
+}
+
+.iconWrap img,
+.iconWrap span {
+  animation: fadeIn var(--pay-duration-base) var(--pay-ease);
+}
+
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
 .card:hover .iconWrap {
