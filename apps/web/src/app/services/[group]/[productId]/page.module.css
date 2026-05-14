@@ -1,0 +1,32 @@
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+}
+
+.breadcrumbLink {
+  font-size: 13px;
+  color: var(--pay-fg-3);
+  text-decoration: none;
+  transition: color var(--pay-duration-fast) var(--pay-ease);
+}
+
+.breadcrumbLink:hover {
+  color: var(--pay-fg-2);
+}
+
+.sep {
+  font-size: 13px;
+  color: var(--pay-fg-4);
+}
+
+.breadcrumbCurrent {
+  font-size: 13px;
+  color: var(--pay-fg-2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 300px;
+}

@@ -1,0 +1,213 @@
+.card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  padding: 48px 40px;
+  background: var(--pay-surface-1);
+  border: 1px solid var(--pay-border-2);
+  border-radius: var(--pay-radius-xl);
+  text-align: center;
+}
+
+/* Icon */
+.iconWrap {
+  width: 72px;
+  height: 72px;
+  border-radius: 20px;
+  background: var(--pay-brand-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  margin-bottom: 8px;
+}
+
+/* Pulse ring for "waiting" state */
+.pulseRing {
+  position: absolute;
+  inset: -6px;
+  border-radius: 26px;
+  border: 2px solid var(--pay-brand-ring);
+  animation: pulseRing 1.8s ease infinite;
+}
+
+@keyframes pulseRing {
+  0%   { opacity: 1; transform: scale(1); }
+  70%  { opacity: 0; transform: scale(1.12); }
+  100% { opacity: 0; transform: scale(1.12); }
+}
+
+/* Text */
+.title {
+  margin: 0;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--pay-fg-1);
+  letter-spacing: -0.02em;
+  font-family: var(--pay-font-sans);
+}
+
+.sub {
+  margin: 0;
+  font-size: 15px;
+  color: var(--pay-fg-2);
+  font-family: var(--pay-font-sans);
+}
+
+.hint {
+  margin: 0;
+  font-size: 13.5px;
+  color: var(--pay-fg-3);
+  font-family: var(--pay-font-sans);
+  line-height: 1.5;
+  max-width: 360px;
+}
+
+/* Pay button */
+.payBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 44px;
+  padding: 0 20px;
+  border-radius: var(--pay-radius-sm);
+  background: var(--pay-brand);
+  color: var(--pay-fg-1);
+  font-family: var(--pay-font-sans);
+  font-size: 14px;
+  font-weight: 600;
+  text-decoration: none;
+  margin-top: 4px;
+  transition: background var(--pay-duration-fast) var(--pay-ease),
+              transform var(--pay-duration-fast) var(--pay-ease);
+  box-shadow: 0 0 0 1px var(--pay-brand-press) inset, 0 6px 20px rgba(102, 50, 250, 0.3);
+}
+
+.payBtn:hover {
+  background: var(--pay-brand-hover);
+  transform: translateY(-1px);
+}
+
+/* Status row */
+.statusRow {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-top: 4px;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: var(--pay-brand);
+  animation: blink 1.4s ease infinite;
+  flex-shrink: 0;
+}
+
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
+}
+
+.statusText {
+  font-size: 12.5px;
+  color: var(--pay-fg-3);
+  font-family: var(--pay-font-sans);
+}
+
+/* Result key box */
+.keyBox {
+  width: 100%;
+  background: var(--pay-bg-1);
+  border: 1px solid var(--pay-border-2);
+  border-radius: var(--pay-radius-md);
+  padding: 16px 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.keyLabel {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pay-fg-3);
+  font-family: var(--pay-font-sans);
+  text-align: left;
+}
+
+.keyRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  justify-content: space-between;
+}
+
+.keyCode {
+  font-family: var(--pay-font-mono);
+  font-size: 16px;
+  font-weight: 600;
+  color: var(--pay-success);
+  letter-spacing: 0.05em;
+  word-break: break-all;
+  text-align: left;
+}
+
+.copyBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  height: 32px;
+  padding: 0 12px;
+  border-radius: var(--pay-radius-sm);
+  background: var(--pay-surface-2);
+  border: 1px solid var(--pay-border-2);
+  color: var(--pay-fg-2);
+  font-family: var(--pay-font-sans);
+  font-size: 12px;
+  font-weight: 600;
+  cursor: pointer;
+  white-space: nowrap;
+  flex-shrink: 0;
+  transition: all var(--pay-duration-fast) var(--pay-ease);
+}
+
+.copyBtn:hover {
+  background: var(--pay-surface-3);
+  color: var(--pay-fg-1);
+}
+
+/* Skeleton */
+@keyframes shimmer {
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--pay-surface-2) 0%,
+    var(--pay-surface-3) 50%,
+    var(--pay-surface-2) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease infinite;
+}
+
+.bone {
+  border-radius: var(--pay-radius-sm);
+  background: linear-gradient(
+    90deg,
+    var(--pay-surface-2) 0%,
+    var(--pay-surface-3) 50%,
+    var(--pay-surface-2) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 1.6s ease infinite;
+}
+
+.boneTitle { height: 28px; width: 200px; border-radius: 6px; }
+.boneSub   { height: 16px; width: 140px; border-radius: 4px; }

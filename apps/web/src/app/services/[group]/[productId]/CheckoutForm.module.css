@@ -1,0 +1,319 @@
+/* Two-column layout */
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 360px;
+  gap: 32px;
+  align-items: start;
+}
+
+@media (max-width: 860px) {
+  .layout { grid-template-columns: 1fr; }
+}
+
+/* Left side */
+.formSide {
+  display: flex;
+  flex-direction: column;
+  gap: 28px;
+}
+
+.productHeader {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.productMeta {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.typeBadge,
+.regionBadge {
+  display: inline-flex;
+  align-items: center;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: var(--pay-radius-full);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  font-family: var(--pay-font-sans);
+}
+
+.typeBadge {
+  background: var(--pay-brand-subtle);
+  border: 1px solid var(--pay-brand-ring);
+  color: var(--pay-brand);
+}
+
+.regionBadge {
+  background: var(--pay-surface-2);
+  border: 1px solid var(--pay-border-2);
+  color: var(--pay-fg-3);
+}
+
+.productName {
+  margin: 0;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--pay-fg-1);
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+  font-family: var(--pay-font-sans);
+}
+
+.outOfStock {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12.5px;
+  color: var(--pay-warning);
+  font-family: var(--pay-font-sans);
+}
+
+/* Form */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.section {
+  background: var(--pay-surface-1);
+  border: 1px solid var(--pay-border-2);
+  border-radius: var(--pay-radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 18px;
+}
+
+.sectionTitle {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pay-fg-3);
+  font-family: var(--pay-font-sans);
+}
+
+/* Fields */
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  cursor: text;
+}
+
+.fieldLabel {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pay-fg-2);
+  font-family: var(--pay-font-sans);
+}
+
+.fieldHint {
+  font-size: 12px;
+  color: var(--pay-fg-3);
+  font-family: var(--pay-font-sans);
+  margin-top: -2px;
+}
+
+.input {
+  height: 42px;
+  padding: 0 14px;
+  border-radius: var(--pay-radius-sm);
+  background: var(--pay-bg-1);
+  border: 1px solid var(--pay-border-2);
+  color: var(--pay-fg-1);
+  font-family: var(--pay-font-sans);
+  font-size: 14px;
+  outline: none;
+  transition: border-color var(--pay-duration-fast) var(--pay-ease),
+              box-shadow var(--pay-duration-fast) var(--pay-ease);
+  width: 100%;
+}
+
+.input::placeholder { color: var(--pay-fg-4); }
+
+.input:focus {
+  border-color: var(--pay-brand);
+  box-shadow: var(--pay-shadow-glow);
+}
+
+.select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%239D9D9C' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 14px center;
+  padding-right: 36px;
+  cursor: pointer;
+}
+
+/* Error */
+.error {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 16px;
+  border-radius: var(--pay-radius-sm);
+  background: var(--pay-danger-subtle);
+  border: 1px solid rgba(255, 84, 104, 0.25);
+  color: var(--pay-danger);
+  font-size: 13.5px;
+  font-family: var(--pay-font-sans);
+}
+
+/* Pay button */
+.payBtn {
+  width: 100%;
+  height: 48px;
+  border-radius: var(--pay-radius-sm);
+  background: var(--pay-brand);
+  color: var(--pay-fg-1);
+  font-family: var(--pay-font-sans);
+  font-size: 15px;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: background var(--pay-duration-fast) var(--pay-ease),
+              opacity var(--pay-duration-fast) var(--pay-ease),
+              transform var(--pay-duration-fast) var(--pay-ease);
+  box-shadow: 0 0 0 1px var(--pay-brand-press) inset, 0 6px 20px rgba(102, 50, 250, 0.35);
+}
+
+.payBtn:hover:not(:disabled) {
+  background: var(--pay-brand-hover);
+  transform: translateY(-1px);
+  box-shadow: 0 0 0 1px var(--pay-brand-press) inset, 0 8px 24px rgba(102, 50, 250, 0.45);
+}
+
+.payBtn:active:not(:disabled) {
+  transform: translateY(0);
+}
+
+.payBtn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Mobile pay button hidden on desktop */
+.payBtnMobile {
+  display: none;
+}
+
+@media (max-width: 860px) {
+  .payBtnMobile { display: flex; }
+}
+
+/* Spinner */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.spinner {
+  animation: spin 0.7s linear infinite;
+  flex-shrink: 0;
+}
+
+/* Right side: summary */
+.summarySide {
+  position: sticky;
+  top: 88px;
+}
+
+.summary {
+  background: var(--pay-surface-1);
+  border: 1px solid var(--pay-border-2);
+  border-radius: var(--pay-radius-lg);
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.summaryTitle {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pay-fg-3);
+  font-family: var(--pay-font-sans);
+}
+
+.summaryRow {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.summaryLabel {
+  font-size: 13.5px;
+  color: var(--pay-fg-2);
+  font-family: var(--pay-font-sans);
+  line-height: 1.4;
+  flex: 1;
+}
+
+.summaryValue {
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--pay-fg-1);
+  font-family: var(--pay-font-sans);
+  white-space: nowrap;
+}
+
+.summaryPayMethod {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--pay-fg-1);
+  font-family: var(--pay-font-sans);
+}
+
+.summaryDivider {
+  height: 1px;
+  background: var(--pay-border-1);
+}
+
+.summaryTotal {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pay-fg-2);
+  font-family: var(--pay-font-sans);
+}
+
+.summaryTotalAmount {
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--pay-fg-1);
+  letter-spacing: -0.02em;
+}
+
+.summaryNote {
+  margin: 0;
+  font-size: 12px;
+  color: var(--pay-fg-4);
+  font-family: var(--pay-font-sans);
+  line-height: 1.5;
+  text-align: center;
+}
+
+/* Hide summary pay btn on mobile (mobile has its own in form) */
+@media (max-width: 860px) {
+  .summarySide { position: static; }
+  .summary .payBtn { display: none; }
+}
