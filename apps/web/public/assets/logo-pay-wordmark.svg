@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 64" fill="none">
+  
+  <g>
+    <rect x="6" y="10" width="44" height="44" rx="10" fill="url(#g)"></rect>
+    <path d="M18 22h24M18 32h16M18 42h10" stroke="#080223" stroke-width="4" stroke-linecap="square"></path>
+    <circle cx="42" cy="42" r="3" fill="#080223"></circle>
+  </g>
+  
+  <text x="64" y="42" font-family="Audiowide, system-ui, sans-serif" font-size="26" letter-spacing="0.04em" fill="#F2F2F7">full focus</text>
+  <text x="64" y="58" font-family="Manrope, system-ui, sans-serif" font-size="11" letter-spacing="0.32em" font-weight="600" fill="#6632FA">PAY</text>
+  <defs>
+    <linearGradient id="g" x1="6" y1="10" x2="50" y2="54" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#00FFB6"></stop>
+      <stop offset="1" stop-color="#6632FA"></stop>
+    </linearGradient>
+  </defs>
+</svg>

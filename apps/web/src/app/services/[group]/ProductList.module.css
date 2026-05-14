@@ -1,0 +1,172 @@
+.tabs {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 24px;
+}
+
+.tab {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  height: 36px;
+  padding: 0 16px;
+  border-radius: var(--pay-radius-sm);
+  background: transparent;
+  border: 1px solid var(--pay-border-2);
+  color: var(--pay-fg-2);
+  font-size: 13.5px;
+  font-weight: 500;
+  font-family: var(--pay-font-sans);
+  cursor: pointer;
+  transition: all var(--pay-duration-fast) var(--pay-ease);
+}
+
+.tab:hover {
+  border-color: var(--pay-border-3);
+  color: var(--pay-fg-1);
+  background: var(--pay-surface-1);
+}
+
+.tabActive {
+  background: var(--pay-brand-subtle);
+  border-color: var(--pay-brand-ring);
+  color: var(--pay-brand);
+}
+
+.tabActive:hover {
+  background: var(--pay-brand-subtle);
+  color: var(--pay-brand);
+}
+
+.tabCount {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 20px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: var(--pay-radius-full);
+  background: rgba(242, 242, 247, 0.08);
+  font-size: 11px;
+  font-weight: 700;
+  color: inherit;
+}
+
+/* Product grid */
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 12px;
+}
+
+.card {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 18px 18px 16px;
+  border-radius: var(--pay-radius-md);
+  background: var(--pay-surface-1);
+  border: 1px solid var(--pay-border-2);
+  text-decoration: none;
+  cursor: pointer;
+  overflow: hidden;
+  transition:
+    background var(--pay-duration-fast) var(--pay-ease),
+    border-color var(--pay-duration-fast) var(--pay-ease),
+    transform var(--pay-duration-fast) var(--pay-ease),
+    box-shadow var(--pay-duration-fast) var(--pay-ease);
+}
+
+.card:hover {
+  background: var(--pay-surface-2);
+  border-color: var(--pay-border-3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35), 0 0 0 1px rgba(102, 50, 250, 0.15);
+}
+
+.card:active {
+  transform: translateY(0);
+}
+
+.cardGlow {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(50% 70% at 50% 0%, rgba(102, 50, 250, 0.12) 0%, transparent 70%);
+  opacity: 0;
+  transition: opacity var(--pay-duration-fast) var(--pay-ease);
+  pointer-events: none;
+}
+
+.card:hover .cardGlow {
+  opacity: 1;
+}
+
+.cardTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.typeBadge {
+  display: inline-flex;
+  align-items: center;
+  height: 20px;
+  padding: 0 8px;
+  border-radius: var(--pay-radius-full);
+  background: var(--pay-surface-3);
+  border: 1px solid var(--pay-border-2);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.05em;
+  text-transform: uppercase;
+  color: var(--pay-fg-3);
+  font-family: var(--pay-font-sans);
+}
+
+.cardName {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--pay-fg-1);
+  line-height: 1.35;
+  font-family: var(--pay-font-sans);
+  flex: 1;
+}
+
+.cardPrice {
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--pay-fg-1);
+  letter-spacing: -0.02em;
+  font-family: var(--pay-font-sans);
+}
+
+.cardBuy {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  margin-top: 4px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--pay-brand);
+  font-family: var(--pay-font-sans);
+  opacity: 0;
+  transform: translateX(-4px);
+  transition:
+    opacity var(--pay-duration-fast) var(--pay-ease),
+    transform var(--pay-duration-fast) var(--pay-ease);
+}
+
+.card:hover .cardBuy {
+  opacity: 1;
+  transform: translateX(0);
+}
+
+/* Empty state */
+.empty {
+  padding: 60px 0;
+  text-align: center;
+  color: var(--pay-fg-3);
+  font-size: 15px;
+  font-family: var(--pay-font-sans);
+}

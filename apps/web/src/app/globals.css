@@ -1,0 +1,102 @@
+@import "tailwindcss";
+
+@font-face {
+  font-family: "Audiowide";
+  src: url("/fonts/Audiowide-Regular.ttf") format("truetype");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
+}
+
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
+
+:root {
+  --ff-glitch-core:  #6632FA;
+  --ff-deep-memory:  #080223;
+  --ff-softlight:    #F2F2F7;
+  --ff-neon-bloom:   #00FFB6;
+  --ff-system-fog:   #9D9D9C;
+
+  --pay-bg-0:        #050112;
+  --pay-bg-1:        #0B0626;
+  --pay-bg-2:        #110933;
+  --pay-surface-1:   #1A1340;
+  --pay-surface-2:   #241B52;
+  --pay-surface-3:   #2E2466;
+
+  --pay-border-1:    rgba(242, 242, 247, 0.06);
+  --pay-border-2:    rgba(242, 242, 247, 0.10);
+  --pay-border-3:    rgba(242, 242, 247, 0.16);
+  --pay-border-focus:#6632FA;
+
+  --pay-fg-1: #F2F2F7;
+  --pay-fg-2: rgba(242, 242, 247, 0.72);
+  --pay-fg-3: rgba(242, 242, 247, 0.50);
+  --pay-fg-4: rgba(242, 242, 247, 0.32);
+  --pay-fg-inverse: #080223;
+
+  --pay-brand:        #6632FA;
+  --pay-brand-hover:  #7A4DFC;
+  --pay-brand-press:  #5524E2;
+  --pay-brand-subtle: rgba(102, 50, 250, 0.14);
+  --pay-brand-ring:   rgba(102, 50, 250, 0.40);
+
+  --pay-success:        #00FFB6;
+  --pay-success-fg:     #00C98E;
+  --pay-success-subtle: rgba(0, 255, 182, 0.12);
+
+  --pay-warning:        #FFB547;
+  --pay-warning-subtle: rgba(255, 181, 71, 0.14);
+
+  --pay-danger:         #FF5468;
+  --pay-danger-subtle:  rgba(255, 84, 104, 0.14);
+
+  --pay-info:           #5BA8FF;
+  --pay-info-subtle:    rgba(91, 168, 255, 0.14);
+
+  --pay-grad-bloom:   radial-gradient(120% 90% at 80% 10%, rgba(0,255,182,0.22) 0%, rgba(102,50,250,0.18) 35%, rgba(8,2,35,0) 70%);
+  --pay-grad-glitch:  linear-gradient(135deg, #6632FA 0%, #2A0FA8 100%);
+  --pay-grad-bloom-mark: linear-gradient(135deg, #00FFB6 0%, #6632FA 100%);
+  --pay-grad-deep:    linear-gradient(180deg, #110933 0%, #080223 100%);
+
+  --pay-font-display: "Audiowide", system-ui, sans-serif;
+  --pay-font-sans:    "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
+  --pay-font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+
+  --pay-radius-xs:    4px;
+  --pay-radius-sm:    8px;
+  --pay-radius-md:    12px;
+  --pay-radius-lg:    16px;
+  --pay-radius-xl:    24px;
+  --pay-radius-full:  9999px;
+
+  --pay-shadow-1: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --pay-shadow-2: 0 4px 16px rgba(0, 0, 0, 0.35);
+  --pay-shadow-3: 0 16px 48px rgba(0, 0, 0, 0.55);
+  --pay-shadow-glow: 0 0 0 4px rgba(102, 50, 250, 0.22);
+  --pay-shadow-glow-success: 0 0 0 4px rgba(0, 255, 182, 0.20);
+
+  --pay-ease: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --pay-duration-fast: 120ms;
+  --pay-duration-base: 200ms;
+  --pay-duration-slow: 360ms;
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--pay-bg-0);
+  color: var(--pay-fg-1);
+  font-family: var(--pay-font-sans);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+@keyframes pulse-dot {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,182,0.45); }
+  50%       { box-shadow: 0 0 0 5px rgba(0,255,182,0.0); }
+}

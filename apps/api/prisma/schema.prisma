@@ -1,0 +1,47 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model Order {
+  id              String      @id @default(cuid())
+  productId       String
+  productName     String
+  productType     ProductType
+  userAmount      Float
+  amount          Float
+  currency        String      @default("RUB")
+  paymentMethod   String
+  status          OrderStatus @default(pending)
+  payUrl          String?
+  transactionUuid String?     @unique
+  resultKey       String?
+  resultType      String?
+  resultUrl       String?
+  email           String?
+  steamLogin      String?
+  createdAt       DateTime    @default(now())
+  updatedAt       DateTime    @updatedAt
+}
+
+enum ProductType {
+  TOPUP
+  VOUCHER
+  ESIM
+  STEAM
+}
+
+enum OrderStatus {
+  pending
+  awaiting_payment
+  paid
+  processing
+  completed
+  failed
+  refunded
+  expired
+}

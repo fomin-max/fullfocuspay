@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Top up Steam — full focus pay</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="Checkout.css">
+</head>
+<body>
+<div class="app">
+
+  <!-- ================ TOP NAV ================ -->
+  <nav class="topnav">
+    <a class="brand" href="#">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">
+        <span class="brand-name">full focus</span>
+        <span class="brand-sub">PAY</span>
+      </span>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="#">Dashboard</a>
+      <a class="nav-link is-active" href="#">Top up</a>
+      <a class="nav-link" href="#">Services</a>
+      <a class="nav-link" href="#">Orders</a>
+      <a class="nav-link" href="#">Help</a>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="trust-pill">
+      <svg class="i" viewBox="0 0 24 24"><path d="M12 3 4 6v5c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+      Secure checkout
+    </div>
+    <button class="icon-btn" aria-label="Help">
+      <svg class="i i-20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.7-2.5 2-2.5 4"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg>
+    </button>
+    <button class="avatar" aria-label="Account">
+      <span class="avatar-img">AK</span>
+      <span class="avatar-meta">
+        <span class="avatar-name">Anton K.</span>
+        <span class="avatar-handle">@antonk</span>
+      </span>
+      <svg class="i avatar-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </nav>
+
+  <!-- ================ PAGE ================ -->
+  <main class="page">
+
+    <!-- Crumbs + steps -->
+    <div class="page-head">
+      <div class="crumb">
+        <a href="#">Services</a>
+        <span class="sep">/</span>
+        <a href="#">Games</a>
+        <span class="sep">/</span>
+        <span style="color: var(--pay-fg-2);">Steam</span>
+      </div>
+      <ol class="steps" aria-label="Checkout steps">
+        <li class="step is-done"><span class="step-dot">1</span> Service</li>
+        <li class="step is-active"><span class="step-dot">2</span> Amount &amp; pay</li>
+        <li class="step"><span class="step-dot">3</span> Confirm</li>
+      </ol>
+    </div>
+
+    <!-- Service header -->
+    <header class="svc-header">
+      <div class="svc-logo"><img src="assets/services/steam.svg" alt=""></div>
+      <div class="svc-meta">
+        <span class="pay-eyebrow" style="color: var(--pay-brand-hover);">popular · games</span>
+        <h1 class="svc-title">Steam wallet</h1>
+        <p class="svc-sub">Top up your Steam balance directly. Funds appear in your account within 60 seconds — verified by SteamID.</p>
+        <div class="svc-tags">
+          <span class="tag"><svg class="i" viewBox="0 0 24 24"><path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/></svg>Instant delivery</span>
+          <span class="tag"><svg class="i" viewBox="0 0 24 24"><path d="M12 3 4 6v5c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-3Z"/></svg>SteamID verified</span>
+          <span class="tag"><svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/></svg>Any region</span>
+        </div>
+      </div>
+      <div class="svc-aside">
+        <div class="aside-row"><span>Rate</span><span class="mono">1 USD = 1.00 Steam wallet</span></div>
+        <div class="aside-row"><span>Limits</span><span class="mono">$5 – $500</span></div>
+        <div class="aside-row"><span>Avg. delivery</span><span class="mono"><span class="stdot live"></span>42 sec</span></div>
+      </div>
+    </header>
+
+    <!-- ================ TWO-COL CHECKOUT ================ -->
+    <section class="checkout">
+
+      <!-- LEFT: amount + method -->
+      <div class="checkout-left">
+
+        <!-- Amount -->
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-eyebrow">step 2 · choose amount</div>
+              <div class="card-title">How much to top up?</div>
+            </div>
+            <span class="card-hint">USD · Steam wallet</span>
+          </div>
+
+          <div class="presets" role="radiogroup" aria-label="Preset amount">
+            <button class="preset" data-amt="5">
+              <span class="preset-amt">$5</span>
+              <span class="preset-credit">5.00 USD</span>
+            </button>
+            <button class="preset" data-amt="10">
+              <span class="preset-amt">$10</span>
+              <span class="preset-credit">10.00 USD</span>
+            </button>
+            <button class="preset" data-amt="25">
+              <span class="preset-amt">$25</span>
+              <span class="preset-credit">25.00 USD</span>
+            </button>
+            <button class="preset is-selected" data-amt="50">
+              <span class="preset-amt">$50</span>
+              <span class="preset-credit">50.00 USD</span>
+              <span class="preset-badge">popular</span>
+            </button>
+            <button class="preset" data-amt="100">
+              <span class="preset-amt">$100</span>
+              <span class="preset-credit">100.00 USD</span>
+            </button>
+            <button class="preset is-custom" data-amt="custom">
+              <span class="preset-amt">Custom</span>
+              <span class="preset-credit">$5 – $500</span>
+            </button>
+          </div>
+
+          <!-- Custom amount field -->
+          <div class="custom-row">
+            <label class="field">
+              <span class="field-label">Or enter amount</span>
+              <span class="field-input">
+                <span class="field-prefix">$</span>
+                <input type="text" inputmode="decimal" value="50" aria-label="Custom amount">
+                <span class="field-suffix">USD</span>
+              </span>
+            </label>
+            <label class="field">
+              <span class="field-label">Steam account</span>
+              <span class="field-input">
+                <input type="text" value="antonk_91" aria-label="Steam login">
+                <span class="field-status">
+                  <svg class="i" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-9.5"/></svg>
+                  verified
+                </span>
+              </span>
+            </label>
+          </div>
+        </section>
+
+        <!-- Payment method -->
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-eyebrow">step 3 · payment method</div>
+              <div class="card-title">How would you like to pay?</div>
+            </div>
+            <span class="card-hint">All methods · no card data stored</span>
+          </div>
+
+          <div class="methods" role="radiogroup" aria-label="Payment method">
+            <label class="method is-selected">
+              <input type="radio" name="method" checked>
+              <span class="method-radio"></span>
+              <span class="method-icon">
+                <svg class="i i-20" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg>
+              </span>
+              <span class="method-body">
+                <span class="method-name">Card · Visa / Mastercard</span>
+                <span class="method-sub">3-D Secure · processed by acquiring bank · no card data stored</span>
+              </span>
+              <span class="method-meta">
+                <span class="method-fee">+ 2.5% fee</span>
+                <span class="method-eta">~ 40s</span>
+              </span>
+            </label>
+
+            <label class="method">
+              <input type="radio" name="method">
+              <span class="method-radio"></span>
+              <span class="method-icon">
+                <svg class="i i-20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 10h8M8 14h6"/></svg>
+              </span>
+              <span class="method-body">
+                <span class="method-name">USDT · TRC-20 <span class="method-flag is-bloom">−10%</span></span>
+                <span class="method-sub">TRON network · 1 confirmation · usually under 60s</span>
+              </span>
+              <span class="method-meta">
+                <span class="method-fee">no fees</span>
+                <span class="method-eta">~ 60s</span>
+              </span>
+            </label>
+
+            <label class="method">
+              <input type="radio" name="method">
+              <span class="method-radio"></span>
+              <span class="method-icon">
+                <svg class="i i-20" viewBox="0 0 24 24"><path d="M12 3v18M5 8l7-5 7 5M5 16l7 5 7-5"/></svg>
+              </span>
+              <span class="method-body">
+                <span class="method-name">USDT · ERC-20</span>
+                <span class="method-sub">Ethereum network · higher network fee · 2–5 minutes</span>
+              </span>
+              <span class="method-meta">
+                <span class="method-fee">network fee ~$3</span>
+                <span class="method-eta">~ 3m</span>
+              </span>
+            </label>
+          </div>
+
+          <!-- Card details (shown for selected method) -->
+          <div class="card-fields">
+            <label class="field">
+              <span class="field-label">Card number</span>
+              <span class="field-input">
+                <span class="field-prefix">
+                  <svg class="i" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18"/></svg>
+                </span>
+                <input type="text" value="4242  4242  4242  4242" aria-label="Card number">
+                <span class="field-status muted">VISA</span>
+              </span>
+            </label>
+            <div class="field-row">
+              <label class="field">
+                <span class="field-label">Expiry</span>
+                <span class="field-input">
+                  <input type="text" value="08 / 28" aria-label="Expiry">
+                </span>
+              </label>
+              <label class="field">
+                <span class="field-label">CVC</span>
+                <span class="field-input">
+                  <input type="password" value="123" aria-label="CVC">
+                  <span class="field-status muted">
+                    <svg class="i" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+                  </span>
+                </span>
+              </label>
+              <label class="field">
+                <span class="field-label">Email for receipt</span>
+                <span class="field-input">
+                  <input type="email" value="anton@fullfocus.club" aria-label="Email">
+                </span>
+              </label>
+            </div>
+          </div>
+        </section>
+
+        <!-- Promo -->
+        <section class="card promo-card">
+          <div class="promo-icon">
+            <svg class="i i-20" viewBox="0 0 24 24"><path d="M20.6 13.4 11 23l-9-9 9.6-9.6a2 2 0 0 1 1.4-.6H19a2 2 0 0 1 2 2v6a2 2 0 0 1-.4 1.6Z"/><circle cx="16" cy="8" r="1.5" fill="currentColor"/></svg>
+          </div>
+          <div class="promo-body">
+            <div class="promo-title">Have a promo code?</div>
+            <div class="promo-sub">Discord-Nitro buyers get <strong>−$2</strong> on the next Steam top-up.</div>
+          </div>
+          <label class="promo-field field">
+            <span class="field-input">
+              <input type="text" placeholder="STEAM2" aria-label="Promo code">
+              <button class="promo-apply">Apply</button>
+            </span>
+          </label>
+        </section>
+      </div>
+
+      <!-- RIGHT: order summary -->
+      <aside class="checkout-right">
+        <section class="card summary">
+          <div class="card-head">
+            <div class="card-title">Order summary</div>
+            <a class="card-link" href="#">Edit</a>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-logo"><img src="assets/services/steam.svg" alt=""></div>
+            <div class="summary-meta">
+              <div class="summary-name">Steam wallet</div>
+              <div class="summary-account">@antonk_91 · USD</div>
+            </div>
+            <div class="summary-amount">$50.00</div>
+          </div>
+
+          <div class="summary-lines">
+            <div class="line">
+              <span>Amount</span>
+              <span class="mono">$50.00</span>
+            </div>
+            <div class="line">
+              <span>Processing fee · 2.5%</span>
+              <span class="mono">$1.25</span>
+            </div>
+            <div class="line">
+              <span>Network / acquirer</span>
+              <span class="mono">$0.00</span>
+            </div>
+            <div class="line is-discount">
+              <span>Promo · first top-up</span>
+              <span class="mono">−$1.25</span>
+            </div>
+          </div>
+
+          <div class="summary-total">
+            <span class="t-label">You pay</span>
+            <span class="t-amount">
+              <span class="t-sign">$</span><span class="t-whole">50</span><span class="t-frac">.00</span>
+              <span class="t-ccy">USD</span>
+            </span>
+          </div>
+          <div class="summary-credit">
+            <svg class="i" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-9.5"/></svg>
+            <span>You receive <strong>50.00 USD</strong> on Steam wallet</span>
+          </div>
+
+          <button class="btn btn-primary btn-lg">
+            <svg class="i i-20" viewBox="0 0 24 24"><path d="M12 3 4 6v5c0 5 3.5 8.5 8 10 4.5-1.5 8-5 8-10V6l-8-3Z"/><path d="m9 12 2 2 4-4"/></svg>
+            Pay $50.00 now
+          </button>
+
+          <div class="summary-foot">
+            <svg class="i" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <span>3-D Secure · PCI DSS · no card data stored on our servers.</span>
+          </div>
+        </section>
+
+        <section class="card eta-card">
+          <div class="eta-row">
+            <span class="eta-icon">
+              <svg class="i i-20" viewBox="0 0 24 24"><path d="M12 8v4l3 2"/><circle cx="12" cy="12" r="9"/></svg>
+            </span>
+            <div>
+              <div class="eta-title">Delivery in <strong>~42 sec</strong></div>
+              <div class="eta-sub">Avg. last 24h · 98.4% success</div>
+            </div>
+          </div>
+          <div class="eta-bar" aria-hidden="true">
+            <span class="eta-fill"></span>
+          </div>
+          <div class="eta-foot">
+            <span>Confirm</span><span>Pay</span><span>Credit</span>
+          </div>
+        </section>
+
+        <div class="legal">
+          By tapping Pay you agree to the <a href="#">Terms</a> and confirm Steam top-ups are <a href="#">non-refundable</a> after delivery.
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+</body>
+</html>

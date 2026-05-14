@@ -1,0 +1,39 @@
+.breadcrumb {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 28px;
+}
+
+.breadcrumbLink {
+  font-size: 13px;
+  color: var(--pay-fg-3);
+  text-decoration: none;
+  transition: color var(--pay-duration-fast) var(--pay-ease);
+}
+
+.breadcrumbLink:hover {
+  color: var(--pay-fg-2);
+}
+
+.breadcrumbCurrent {
+  font-size: 13px;
+  color: var(--pay-fg-2);
+}
+
+.categoryBadge {
+  display: inline-flex;
+  align-items: center;
+  margin-top: 10px;
+  height: 22px;
+  padding: 0 10px;
+  border-radius: var(--pay-radius-full);
+  background: var(--pay-surface-2);
+  border: 1px solid var(--pay-border-2);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--pay-fg-3);
+  font-family: var(--pay-font-sans);
+}

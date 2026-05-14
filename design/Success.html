@@ -1,0 +1,892 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>Order delivered — full focus pay</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<link rel="stylesheet" href="Checkout.css">
+<style>
+/* =========================================================
+   Full Focus Pay — Success / Order Confirmed
+   Layered on top of Checkout.css
+   ========================================================= */
+
+.success-page { gap: 32px; }
+
+/* Steps: final state shows all three with check + the third highlighted */
+.step.is-final .step-dot { background: var(--pay-success); color: var(--pay-bg-0); }
+.step.is-final { color: var(--pay-success-fg); background: var(--pay-success-subtle); }
+.step.is-done .step-dot { background: var(--pay-success-subtle); color: var(--pay-success-fg); display: grid; place-items: center; }
+.step .step-dot .i { width: 12px; height: 12px; stroke-width: 2.5; }
+
+/* ===================== HERO ===================== */
+.success-hero {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  padding: 56px 48px 48px;
+  background: var(--pay-grad-deep);
+  border: 1px solid var(--pay-border-2);
+  border-radius: var(--pay-radius-xl);
+  overflow: hidden;
+}
+.success-hero::before {
+  content: "";
+  position: absolute;
+  inset: -20% -10% auto auto;
+  width: 800px; height: 800px;
+  background:
+    radial-gradient(circle at 50% 50%, rgba(0,255,182,0.30) 0%, rgba(0,255,182,0) 45%),
+    radial-gradient(circle at 30% 70%, rgba(102,50,250,0.45) 0%, rgba(102,50,250,0) 55%);
+  z-index: -2;
+  pointer-events: none;
+  animation: hero-glow 6s ease-in-out infinite alternate;
+}
+@keyframes hero-glow {
+  from { transform: translate(0,0) scale(1); opacity: 0.85; }
+  to   { transform: translate(-20px, 10px) scale(1.04); opacity: 1; }
+}
+.success-hero::after {
+  content: "";
+  position: absolute; inset: 0;
+  background-image:
+    linear-gradient(rgba(242,242,247,0.035) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(242,242,247,0.035) 1px, transparent 1px);
+  background-size: 32px 32px;
+  -webkit-mask-image: radial-gradient(70% 70% at 50% 30%, black 0%, transparent 75%);
+          mask-image: radial-gradient(70% 70% at 50% 30%, black 0%, transparent 75%);
+  z-index: -1;
+}
+
+/* Rays behind the medallion */
+.rays {
+  position: absolute;
+  top: 56px; left: 50%;
+  width: 360px; height: 360px;
+  transform: translate(-50%, -10%);
+  z-index: -1;
+  pointer-events: none;
+  animation: rays-spin 22s linear infinite;
+}
+@keyframes rays-spin { to { transform: translate(-50%, -10%) rotate(360deg); } }
+.ray {
+  position: absolute;
+  top: 50%; left: 50%;
+  width: 1px;
+  height: 180px;
+  transform-origin: 0 0;
+  transform: rotate(var(--a));
+  background: linear-gradient(to bottom, rgba(0,255,182,0) 0%, rgba(0,255,182,0.35) 50%, rgba(102,50,250,0) 100%);
+}
+.ray:nth-child(odd) {
+  background: linear-gradient(to bottom, rgba(102,50,250,0) 0%, rgba(102,50,250,0.45) 60%, rgba(0,255,182,0) 100%);
+}
+
+/* ===================== MEDALLION ===================== */
+.medallion {
+  position: relative;
+  width: 124px; height: 124px;
+  margin-bottom: 28px;
+  animation: medallion-in 600ms var(--pay-ease) both;
+}
+@keyframes medallion-in {
+  from { transform: scale(0.6); opacity: 0; }
+  to   { transform: scale(1);   opacity: 1; }
+}
+.medallion-ring {
+  position: absolute; inset: 0;
+  border-radius: 50%;
+  background: conic-gradient(from 0deg, #00FFB6, #6632FA, #00FFB6);
+  -webkit-mask: radial-gradient(circle at center, transparent 56px, black 57px);
+          mask: radial-gradient(circle at center, transparent 56px, black 57px);
+  filter: drop-shadow(0 0 22px rgba(0,255,182,0.5));
+  animation: ring-spin 4s linear infinite;
+}
+@keyframes ring-spin { to { transform: rotate(360deg); } }
+.medallion-disc {
+  position: absolute; inset: 8px;
+  border-radius: 50%;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(255,255,255,0.18), rgba(255,255,255,0) 60%),
+    linear-gradient(160deg, #00FFB6 0%, #00C98E 40%, #6632FA 100%);
+  display: grid; place-items: center;
+  color: var(--pay-bg-0);
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,0.18) inset,
+    0 24px 60px rgba(0,255,182,0.30),
+    0 8px 30px rgba(102,50,250,0.40);
+}
+.medallion-check { width: 64px; height: 64px; }
+.medallion-check path {
+  stroke-dasharray: 100;
+  stroke-dashoffset: 100;
+  animation: check-draw 500ms var(--pay-ease) 250ms forwards;
+}
+@keyframes check-draw {
+  to { stroke-dashoffset: 0; }
+}
+
+/* ===================== HERO COPY ===================== */
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  font-weight: 700;
+  color: var(--pay-success-fg);
+  margin-bottom: 14px;
+}
+.success-hero .hero-title {
+  margin: 0;
+  font-family: var(--pay-font-sans);
+  font-size: 52px;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  font-weight: 700;
+  color: var(--pay-fg-1);
+  max-width: 720px;
+}
+.success-hero .hero-sub {
+  margin: 14px 0 0;
+  color: var(--pay-fg-2);
+  font-size: 15.5px;
+  max-width: 560px;
+  line-height: 1.5;
+}
+.success-hero .hero-sub strong { color: var(--pay-success-fg); font-weight: 700; }
+
+/* ===================== RECEIPT BAND ===================== */
+.hero-receipt {
+  margin: 32px 0 24px;
+  width: 100%;
+  max-width: 720px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  align-items: center;
+  padding: 22px 24px;
+  background: rgba(8, 2, 35, 0.55);
+  border: 1px solid var(--pay-border-2);
+  border-radius: var(--pay-radius-lg);
+  text-align: left;
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+}
+.receipt-svc { display: flex; align-items: center; gap: 14px; }
+.receipt-logo {
+  width: 52px; height: 52px;
+  border-radius: var(--pay-radius-md);
+  overflow: hidden;
+  flex-shrink: 0;
+  border: 1px solid var(--pay-border-2);
+}
+.receipt-logo img { width: 100%; height: 100%; display: block; }
+.receipt-arrow {
+  color: var(--pay-success);
+  flex-shrink: 0;
+  width: 28px; height: 16px;
+  display: grid; place-items: center;
+}
+.receipt-arrow svg { width: 100%; height: 100%; }
+.receipt-account { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.receipt-account-handle {
+  font-family: var(--pay-font-mono);
+  font-size: 14.5px; font-weight: 600;
+  color: var(--pay-fg-1);
+}
+.receipt-account-sub {
+  font-size: 11.5px; color: var(--pay-fg-3);
+}
+.receipt-credit { display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.credit-eyebrow {
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--pay-fg-3);
+}
+.credit-amount {
+  display: inline-flex; align-items: baseline;
+  font-family: var(--pay-font-sans);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  font-variant-numeric: tabular-nums;
+  color: var(--pay-success);
+  text-shadow: 0 0 18px rgba(0,255,182,0.25);
+}
+.credit-amount .sign  { font-size: 20px; color: var(--pay-success-fg); }
+.credit-amount .whole { font-size: 44px; line-height: 1; }
+.credit-amount .frac  { font-size: 22px; color: var(--pay-success-fg); }
+.credit-ccy {
+  font-family: var(--pay-font-mono);
+  font-size: 11px;
+  color: var(--pay-fg-3);
+  letter-spacing: 0.06em;
+  margin-left: 8px;
+  align-self: center;
+  font-weight: 500;
+}
+
+/* ===================== HERO STATS ===================== */
+.hero-stats {
+  margin: 0 0 28px;
+  width: 100%;
+  max-width: 720px;
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  border-top: 1px solid var(--pay-border-1);
+  border-bottom: 1px solid var(--pay-border-1);
+  padding: 18px 0;
+}
+.hstat { padding: 0 18px; text-align: left; border-right: 1px solid var(--pay-border-1); }
+.hstat:last-child { border-right: 0; }
+.hstat dt {
+  font-size: 10.5px;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--pay-fg-3);
+  margin-bottom: 8px;
+}
+.hstat dd {
+  margin: 0;
+  font-size: 13px;
+  color: var(--pay-fg-1);
+  display: flex; align-items: center; gap: 8px;
+  font-weight: 500;
+}
+.hstat .mono { font-family: var(--pay-font-mono); }
+.copy-btn {
+  background: transparent;
+  border: 1px solid var(--pay-border-2);
+  border-radius: var(--pay-radius-xs);
+  color: var(--pay-fg-3);
+  width: 22px; height: 22px;
+  display: grid; place-items: center;
+  cursor: pointer;
+  transition: all var(--pay-duration-fast) var(--pay-ease);
+}
+.copy-btn .i { width: 12px; height: 12px; }
+.copy-btn:hover { color: var(--pay-fg-1); border-color: var(--pay-border-3); }
+
+.status-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  padding: 3px 9px;
+  border-radius: var(--pay-radius-full);
+  font-size: 11px; font-weight: 600;
+  text-transform: lowercase;
+}
+.status-chip.is-success { background: var(--pay-success-subtle); color: var(--pay-success-fg); border: 1px solid rgba(0,255,182,0.22); }
+.status-chip .stdot { background: var(--pay-success); }
+
+/* ===================== HERO ACTIONS ===================== */
+.hero-actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.btn.btn-ghost {
+  background: rgba(242,242,247,0.04);
+  color: var(--pay-fg-1);
+  border-color: var(--pay-border-2);
+  text-decoration: none;
+}
+.btn.btn-ghost:hover { background: rgba(242,242,247,0.08); border-color: var(--pay-border-3); }
+.btn.btn-primary {
+  text-decoration: none;
+}
+.btn-block { width: 100%; }
+
+/* ===================== TRANSACTION DETAILS ===================== */
+.tx-detail { display: flex; flex-direction: column; gap: 0; }
+.tx-detail-row {
+  display: grid;
+  grid-template-columns: 180px 1fr;
+  gap: 16px;
+  padding: 14px 0;
+  border-bottom: 1px solid var(--pay-border-1);
+  align-items: center;
+}
+.tx-detail-row:last-child { border-bottom: 0; }
+.tx-detail-row:first-child { padding-top: 0; }
+.td-label {
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--pay-fg-3);
+}
+.td-value { font-size: 13.5px; color: var(--pay-fg-1); }
+.td-value.mono { font-family: var(--pay-font-mono); font-size: 13px; }
+.td-value--svc { display: flex; align-items: center; gap: 12px; }
+.td-svc-logo { width: 36px; height: 36px; border-radius: var(--pay-radius-sm); overflow: hidden; }
+.td-svc-logo img { width: 100%; height: 100%; display: block; }
+.td-svc-name { display: block; font-weight: 700; }
+.td-svc-sub { display: block; font-size: 12px; color: var(--pay-fg-3); margin-top: 2px; font-family: var(--pay-font-mono); }
+.method-mini {
+  display: inline-flex; align-items: center; gap: 8px;
+  color: var(--pay-fg-1);
+  font-weight: 500;
+}
+.method-mini .mono { font-family: var(--pay-font-mono); color: var(--pay-fg-2); margin-left: 4px; }
+
+/* ===================== TIMELINE ===================== */
+.timeline {
+  margin-top: 8px;
+  padding: 18px;
+  background: var(--pay-bg-1);
+  border: 1px solid var(--pay-border-1);
+  border-radius: var(--pay-radius-md);
+  display: flex; flex-direction: column; gap: 18px;
+  position: relative;
+}
+.tl-step {
+  display: grid;
+  grid-template-columns: 28px 1fr;
+  gap: 14px;
+  align-items: flex-start;
+  position: relative;
+}
+.tl-step:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  left: 13px;
+  top: 28px;
+  bottom: -18px;
+  width: 1px;
+  background: var(--pay-border-2);
+}
+.tl-step.is-done:not(:last-child)::before {
+  background: linear-gradient(to bottom, var(--pay-success) 0%, var(--pay-success) 50%, var(--pay-border-2) 100%);
+  opacity: 0.5;
+}
+.tl-dot {
+  width: 28px; height: 28px;
+  border-radius: 50%;
+  display: grid; place-items: center;
+  background: var(--pay-surface-2);
+  border: 1px solid var(--pay-border-2);
+  flex-shrink: 0;
+  color: var(--pay-fg-3);
+}
+.tl-step.is-done .tl-dot {
+  background: var(--pay-success-subtle);
+  border-color: rgba(0,255,182,0.4);
+  color: var(--pay-success-fg);
+}
+.tl-step.is-done .tl-dot .i { width: 14px; height: 14px; stroke-width: 2.5; }
+.tl-step.is-active .tl-dot {
+  background: rgba(0,255,182,0.10);
+  border-color: var(--pay-success);
+}
+.tl-step.is-active .tl-dot .stdot.live { width: 8px; height: 8px; }
+.tl-title { font-size: 13.5px; font-weight: 700; color: var(--pay-fg-1); }
+.tl-step.is-active .tl-title { color: var(--pay-success-fg); }
+.tl-sub { font-size: 12px; color: var(--pay-fg-3); margin-top: 3px; font-family: var(--pay-font-mono); }
+
+/* ===================== REORDER ===================== */
+.reorder-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+}
+.reorder {
+  display: grid;
+  grid-template-columns: 44px 1fr auto;
+  align-items: center;
+  gap: 14px;
+  padding: 14px;
+  background: var(--pay-bg-1);
+  border: 1px solid var(--pay-border-1);
+  border-radius: var(--pay-radius-md);
+  color: var(--pay-fg-1);
+  text-decoration: none;
+  transition: all var(--pay-duration-fast) var(--pay-ease);
+}
+.reorder:hover {
+  background: var(--pay-surface-2);
+  border-color: var(--pay-border-3);
+  transform: translateY(-1px);
+}
+.reorder-logo { width: 44px; height: 44px; border-radius: var(--pay-radius-sm); overflow: hidden; }
+.reorder-logo img { width: 100%; height: 100%; display: block; }
+.reorder-main { display: flex; flex-direction: column; gap: 3px; min-width: 0; }
+.reorder-name { font-size: 13px; font-weight: 700; color: var(--pay-fg-1); }
+.reorder-sub { font-size: 11.5px; color: var(--pay-fg-3); font-family: var(--pay-font-mono); }
+.reorder-cta {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 28px; padding: 0 10px;
+  border-radius: var(--pay-radius-sm);
+  background: var(--pay-brand-subtle);
+  border: 1px solid var(--pay-brand-ring);
+  color: var(--pay-fg-1);
+  font-size: 11.5px; font-weight: 600;
+}
+.reorder:hover .reorder-cta { background: var(--pay-brand); }
+
+/* ===================== RECEIPT CARD ===================== */
+.receipt-card .summary-total { padding-top: 14px; }
+.receipt-num {
+  font-family: var(--pay-font-mono);
+  color: var(--pay-fg-3);
+  font-size: 12px;
+}
+.receipt-actions {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+}
+.receipt-actions .btn { height: 38px; font-size: 12.5px; padding: 0 12px; }
+
+/* ===================== SUPPORT CARD ===================== */
+.support-card {
+  flex-direction: row;
+  align-items: center;
+  gap: 14px;
+  padding: 16px 18px;
+}
+.support-icon {
+  width: 40px; height: 40px;
+  border-radius: var(--pay-radius-sm);
+  background: var(--pay-brand-subtle);
+  color: var(--pay-brand-hover);
+  display: grid; place-items: center;
+  flex-shrink: 0;
+}
+.support-body { flex: 1; min-width: 0; }
+.support-title { font-size: 13.5px; font-weight: 700; color: var(--pay-fg-1); }
+.support-sub { font-size: 11.5px; color: var(--pay-fg-3); margin-top: 2px; }
+.support-link {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 32px; padding: 0 12px;
+  border-radius: var(--pay-radius-sm);
+  background: var(--pay-surface-2);
+  border: 1px solid var(--pay-border-2);
+  color: var(--pay-fg-1);
+  font-size: 12.5px; font-weight: 600;
+  text-decoration: none;
+  transition: all var(--pay-duration-fast) var(--pay-ease);
+}
+.support-link:hover { background: var(--pay-surface-3); border-color: var(--pay-border-3); }
+
+/* ===================== CONFETTI ===================== */
+.confetti {
+  position: fixed; inset: 0;
+  pointer-events: none;
+  z-index: 30;
+  overflow: hidden;
+}
+.confetti .dot {
+  position: absolute;
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  top: -10px;
+  opacity: 0;
+  animation: confetti-fall 1800ms cubic-bezier(0.2, 0.7, 0.2, 1) forwards;
+}
+.confetti .d1 { left: 28%; background: var(--pay-success);     animation-delay: 350ms; }
+.confetti .d2 { left: 38%; background: var(--pay-brand);       animation-delay: 420ms; --x: -10px; }
+.confetti .d3 { left: 46%; background: var(--pay-success);     animation-delay: 280ms; --x: 8px; }
+.confetti .d4 { left: 54%; background: var(--pay-brand-hover); animation-delay: 380ms; --x: 4px; }
+.confetti .d5 { left: 62%; background: var(--pay-success);     animation-delay: 460ms; --x: -6px; width: 4px; height: 4px; }
+.confetti .d6 { left: 72%; background: var(--pay-brand);       animation-delay: 320ms; --x: 12px; }
+.confetti .d7 { left: 33%; background: var(--pay-brand-hover); animation-delay: 510ms; --x: -4px; width: 4px; height: 4px; }
+.confetti .d8 { left: 67%; background: var(--pay-success);     animation-delay: 240ms; --x: 6px; }
+@keyframes confetti-fall {
+  0%   { transform: translate(0, 0) scale(0.6); opacity: 0; }
+  10%  { opacity: 1; }
+  100% { transform: translate(var(--x, 0), 320px) scale(1); opacity: 0; }
+}
+
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ================ TOP NAV ================ -->
+  <nav class="topnav">
+    <a class="brand" href="#">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">
+        <span class="brand-name">full focus</span>
+        <span class="brand-sub">PAY</span>
+      </span>
+    </a>
+    <div class="nav-links">
+      <a class="nav-link" href="#">Dashboard</a>
+      <a class="nav-link" href="#">Top up</a>
+      <a class="nav-link" href="#">Services</a>
+      <a class="nav-link is-active" href="#">Orders</a>
+      <a class="nav-link" href="#">Help</a>
+    </div>
+    <div class="nav-spacer"></div>
+    <div class="trust-pill">
+      <span class="stdot live"></span>
+      Order delivered
+    </div>
+    <button class="icon-btn" aria-label="Help">
+      <svg class="i i-20" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M9.5 9a2.5 2.5 0 0 1 5 0c0 1.7-2.5 2-2.5 4"/><circle cx="12" cy="17" r="0.6" fill="currentColor"/></svg>
+    </button>
+    <button class="avatar" aria-label="Account">
+      <span class="avatar-img">AK</span>
+      <span class="avatar-meta">
+        <span class="avatar-name">Anton K.</span>
+        <span class="avatar-handle">@antonk</span>
+      </span>
+      <svg class="i avatar-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </nav>
+
+  <!-- ================ PAGE ================ -->
+  <main class="page success-page">
+
+    <!-- Steps strip -->
+    <div class="page-head">
+      <div class="crumb">
+        <a href="#">Orders</a>
+        <span class="sep">/</span>
+        <span style="color: var(--pay-fg-2);">FFP-9X4A2K</span>
+      </div>
+      <ol class="steps" aria-label="Checkout steps">
+        <li class="step is-done"><span class="step-dot"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-9.5"/></svg></span> Service</li>
+        <li class="step is-done"><span class="step-dot"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-9.5"/></svg></span> Amount &amp; pay</li>
+        <li class="step is-active is-final"><span class="step-dot"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-9.5"/></svg></span> Confirmed</li>
+      </ol>
+    </div>
+
+    <!-- ============== HERO SUCCESS ============== -->
+    <section class="success-hero">
+      <!-- Decoration: confetti rays -->
+      <div class="rays" aria-hidden="true">
+        <span class="ray" style="--a:-72deg"></span>
+        <span class="ray" style="--a:-54deg"></span>
+        <span class="ray" style="--a:-36deg"></span>
+        <span class="ray" style="--a:-18deg"></span>
+        <span class="ray" style="--a:0deg"></span>
+        <span class="ray" style="--a:18deg"></span>
+        <span class="ray" style="--a:36deg"></span>
+        <span class="ray" style="--a:54deg"></span>
+        <span class="ray" style="--a:72deg"></span>
+      </div>
+
+      <!-- Animated check medallion -->
+      <div class="medallion" aria-hidden="true">
+        <div class="medallion-ring"></div>
+        <div class="medallion-disc">
+          <svg class="medallion-check" viewBox="0 0 48 48" fill="none">
+            <path d="M14 24.5 21 31l13-14" stroke="currentColor" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" pathLength="100" />
+          </svg>
+        </div>
+      </div>
+
+      <div class="hero-eyebrow"><span class="stdot live"></span> Live · just now</div>
+      <h1 class="hero-title">Steam wallet credited.</h1>
+      <p class="hero-sub">Delivered in <strong>42 seconds</strong>. Funds are already in your Steam account — go play.</p>
+
+      <div class="hero-receipt">
+        <div class="receipt-svc">
+          <span class="receipt-logo"><img src="assets/services/steam.svg" alt=""></span>
+          <span class="receipt-arrow">
+            <svg viewBox="0 0 28 16" fill="none">
+              <path d="M0 8h26" stroke="currentColor" stroke-width="1.5"/>
+              <path d="M20 2l6 6-6 6" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            </svg>
+          </span>
+          <span class="receipt-account">
+            <span class="receipt-account-handle">@antonk_91</span>
+            <span class="receipt-account-sub">Steam · verified</span>
+          </span>
+        </div>
+        <div class="receipt-credit">
+          <span class="credit-eyebrow">Credited</span>
+          <span class="credit-amount">
+            <span class="sign">+$</span><span class="whole">50</span><span class="frac">.00</span>
+            <span class="credit-ccy">USD</span>
+          </span>
+        </div>
+      </div>
+
+      <!-- Hero stats -->
+      <dl class="hero-stats">
+        <div class="hstat">
+          <dt>Order ID</dt>
+          <dd class="mono">
+            FFP-9X4A2K
+            <button class="copy-btn" aria-label="Copy order ID">
+              <svg class="i" viewBox="0 0 24 24"><rect x="8" y="8" width="12" height="12" rx="2"/><path d="M4 16V6a2 2 0 0 1 2-2h10"/></svg>
+            </button>
+          </dd>
+        </div>
+        <div class="hstat">
+          <dt>Delivered</dt>
+          <dd>14 May 2026 · 17:42 GMT</dd>
+        </div>
+        <div class="hstat">
+          <dt>Delivery time</dt>
+          <dd><strong style="color: var(--pay-success-fg);">42 sec</strong></dd>
+        </div>
+        <div class="hstat">
+          <dt>Status</dt>
+          <dd>
+            <span class="status-chip is-success">
+              <span class="stdot"></span>
+              delivered
+            </span>
+          </dd>
+        </div>
+      </dl>
+
+      <!-- Primary actions -->
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="#">
+          <svg class="i i-20" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
+          Top up again
+        </a>
+        <a class="btn btn-ghost" href="#">
+          Go to Orders
+          <svg class="i" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+        <a class="btn btn-ghost" href="#">
+          <svg class="i" viewBox="0 0 24 24"><path d="M12 4v12m0 0 4-4m-4 4-4-4"/><path d="M4 20h16"/></svg>
+          Download receipt
+        </a>
+      </div>
+    </section>
+
+    <!-- ============== TWO-COL DETAILS ============== -->
+    <section class="checkout">
+      <div class="checkout-left">
+
+        <!-- Transaction details -->
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-eyebrow">order details</div>
+              <div class="card-title">Transaction</div>
+            </div>
+            <a class="card-link" href="#">
+              <svg class="i" viewBox="0 0 24 24"><path d="M12 4v12m0 0 4-4m-4 4-4-4"/><path d="M4 20h16"/></svg>
+              Download PDF
+            </a>
+          </div>
+
+          <div class="tx-detail">
+            <div class="tx-detail-row">
+              <span class="td-label">Service</span>
+              <span class="td-value td-value--svc">
+                <span class="td-svc-logo"><img src="assets/services/steam.svg" alt=""></span>
+                <span>
+                  <span class="td-svc-name">Steam wallet</span>
+                  <span class="td-svc-sub">@antonk_91 · USD region</span>
+                </span>
+              </span>
+            </div>
+            <div class="tx-detail-row">
+              <span class="td-label">Order ID</span>
+              <span class="td-value mono">FFP-9X4A2K</span>
+            </div>
+            <div class="tx-detail-row">
+              <span class="td-label">Payment method</span>
+              <span class="td-value">
+                <span class="method-mini">
+                  <svg class="i i-20" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="13" rx="2"/><path d="M3 10h18M7 15h3"/></svg>
+                  Visa <span class="mono"> ····  4242</span>
+                </span>
+              </span>
+            </div>
+            <div class="tx-detail-row">
+              <span class="td-label">Processor</span>
+              <span class="td-value">Pay Stripe · 3-D Secure verified</span>
+            </div>
+            <div class="tx-detail-row">
+              <span class="td-label">Authorized</span>
+              <span class="td-value">14 May 2026 · 17:41 GMT</span>
+            </div>
+            <div class="tx-detail-row">
+              <span class="td-label">Delivered</span>
+              <span class="td-value">14 May 2026 · 17:42 GMT</span>
+            </div>
+          </div>
+
+          <!-- Timeline -->
+          <div class="timeline">
+            <div class="tl-step is-done">
+              <span class="tl-dot"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-9.5"/></svg></span>
+              <div>
+                <div class="tl-title">Authorized</div>
+                <div class="tl-sub">17:41:18 GMT · card · 3-D Secure passed</div>
+              </div>
+            </div>
+            <div class="tl-step is-done">
+              <span class="tl-dot"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-9.5"/></svg></span>
+              <div>
+                <div class="tl-title">Captured</div>
+                <div class="tl-sub">17:41:38 GMT · $51.25 USD held by Pay</div>
+              </div>
+            </div>
+            <div class="tl-step is-done">
+              <span class="tl-dot"><svg class="i" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-9.5"/></svg></span>
+              <div>
+                <div class="tl-title">Sent to Steam</div>
+                <div class="tl-sub">17:42:00 GMT · 50.00 USD credited to @antonk_91</div>
+              </div>
+            </div>
+            <div class="tl-step is-active">
+              <span class="tl-dot"><span class="stdot live"></span></span>
+              <div>
+                <div class="tl-title">Receipt issued</div>
+                <div class="tl-sub">Emailed to anton@fullfocus.club</div>
+              </div>
+            </div>
+          </div>
+        </section>
+
+        <!-- Top up again rail -->
+        <section class="card">
+          <div class="card-head">
+            <div>
+              <div class="card-eyebrow">keep going</div>
+              <div class="card-title">Top up another service</div>
+            </div>
+            <a class="card-link" href="#">All services<svg class="i" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg></a>
+          </div>
+          <div class="reorder-grid">
+            <a class="reorder" href="#">
+              <span class="reorder-logo"><img src="assets/services/steam.svg" alt=""></span>
+              <span class="reorder-main">
+                <span class="reorder-name">Steam · same as last</span>
+                <span class="reorder-sub">$50 · Visa · ~42s</span>
+              </span>
+              <span class="reorder-cta">
+                <svg class="i" viewBox="0 0 24 24"><path d="M3 12a9 9 0 1 0 3-6.7M3 5v5h5"/></svg>
+                Reorder
+              </span>
+            </a>
+            <a class="reorder" href="#">
+              <span class="reorder-logo"><img src="assets/services/discord.svg" alt=""></span>
+              <span class="reorder-main">
+                <span class="reorder-name">Discord Nitro</span>
+                <span class="reorder-sub">$9.99 · monthly</span>
+              </span>
+              <span class="reorder-cta">
+                <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                Buy
+              </span>
+            </a>
+            <a class="reorder" href="#">
+              <span class="reorder-logo"><img src="assets/services/openai.svg" alt=""></span>
+              <span class="reorder-main">
+                <span class="reorder-name">ChatGPT Plus</span>
+                <span class="reorder-sub">$20 · monthly</span>
+              </span>
+              <span class="reorder-cta">
+                <svg class="i" viewBox="0 0 24 24"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+                Buy
+              </span>
+            </a>
+          </div>
+        </section>
+      </div>
+
+      <!-- RIGHT: receipt -->
+      <aside class="checkout-right">
+        <section class="card summary receipt-card">
+          <div class="card-head">
+            <div class="card-title">Receipt</div>
+            <span class="receipt-num mono">#FFP-9X4A2K</span>
+          </div>
+
+          <div class="summary-item">
+            <div class="summary-logo"><img src="assets/services/steam.svg" alt=""></div>
+            <div class="summary-meta">
+              <div class="summary-name">Steam wallet</div>
+              <div class="summary-account">@antonk_91 · USD</div>
+            </div>
+            <div class="summary-amount">$50.00</div>
+          </div>
+
+          <div class="summary-lines">
+            <div class="line">
+              <span>Amount</span>
+              <span class="mono">$50.00</span>
+            </div>
+            <div class="line">
+              <span>Processing fee · 2.5%</span>
+              <span class="mono">$1.25</span>
+            </div>
+            <div class="line is-discount">
+              <span>Promo · first top-up</span>
+              <span class="mono">−$1.25</span>
+            </div>
+          </div>
+
+          <div class="summary-total">
+            <span class="t-label">Paid</span>
+            <span class="t-amount">
+              <span class="t-sign">$</span><span class="t-whole">50</span><span class="t-frac">.00</span>
+              <span class="t-ccy">USD</span>
+            </span>
+          </div>
+
+          <div class="summary-credit">
+            <svg class="i" viewBox="0 0 24 24"><path d="M5 12.5 10 17l9-9.5"/></svg>
+            <span><strong>50.00 USD</strong> credited to Steam · @antonk_91</span>
+          </div>
+
+          <div class="receipt-actions">
+            <a class="btn btn-ghost btn-block" href="#">
+              <svg class="i" viewBox="0 0 24 24"><path d="M12 4v12m0 0 4-4m-4 4-4-4"/><path d="M4 20h16"/></svg>
+              Download PDF
+            </a>
+            <a class="btn btn-ghost btn-block" href="#">
+              <svg class="i" viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg>
+              Email again
+            </a>
+          </div>
+
+          <div class="summary-foot">
+            <svg class="i" viewBox="0 0 24 24"><rect x="4" y="10" width="16" height="10" rx="2"/><path d="M8 10V7a4 4 0 0 1 8 0v3"/></svg>
+            <span>Issued by Full Focus Pay · 14 May 2026 · 17:42 GMT.</span>
+          </div>
+        </section>
+
+        <section class="card support-card">
+          <div class="support-icon">
+            <svg class="i i-20" viewBox="0 0 24 24"><path d="M21 12a9 9 0 0 1-9 9 9 9 0 0 1-9-9 9 9 0 0 1 18 0Z"/><path d="M8 13a4 4 0 0 0 8 0"/><circle cx="9" cy="10" r="0.6" fill="currentColor"/><circle cx="15" cy="10" r="0.6" fill="currentColor"/></svg>
+          </div>
+          <div class="support-body">
+            <div class="support-title">Anything not right?</div>
+            <div class="support-sub">Our team replies in &lt; 4 minutes, 24/7.</div>
+          </div>
+          <a class="support-link" href="#">
+            Chat
+            <svg class="i" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+          </a>
+        </section>
+
+        <div class="legal">
+          Save this receipt for your records. Refunds for delivered Steam top-ups are subject to <a href="#">Steam policy</a>. Questions? <a href="#">Contact support</a>.
+        </div>
+      </aside>
+    </section>
+  </main>
+</div>
+
+<!-- Confetti dots (purely decorative) -->
+<div class="confetti" aria-hidden="true">
+  <span class="dot d1"></span>
+  <span class="dot d2"></span>
+  <span class="dot d3"></span>
+  <span class="dot d4"></span>
+  <span class="dot d5"></span>
+  <span class="dot d6"></span>
+  <span class="dot d7"></span>
+  <span class="dot d8"></span>
+</div>
+</body>
+</html>

@@ -1,0 +1,1019 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>full focus pay — dashboard</title>
+<link rel="stylesheet" href="colors_and_type.css">
+<style>
+  * { box-sizing: border-box; }
+  html, body { margin: 0; padding: 0; }
+  body {
+    background: var(--pay-bg-0);
+    color: var(--pay-fg-1);
+    font-family: var(--pay-font-sans);
+    font-size: var(--pay-text-base);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ---------- App shell ---------- */
+  .app {
+    min-height: 100vh;
+    background:
+      radial-gradient(70% 50% at 85% -10%, rgba(102,50,250,0.18) 0%, rgba(8,2,35,0) 60%),
+      radial-gradient(50% 40% at 0% 0%, rgba(0,255,182,0.07) 0%, rgba(8,2,35,0) 55%),
+      var(--pay-bg-0);
+  }
+
+  /* ---------- Top nav ---------- */
+  .topnav {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    height: 64px;
+    display: flex;
+    align-items: center;
+    gap: var(--pay-space-7);
+    padding: 0 var(--pay-space-8);
+    background: rgba(11, 6, 38, 0.72);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--pay-border-1);
+  }
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    text-decoration: none;
+  }
+  .brand-mark {
+    width: 32px; height: 32px;
+    border-radius: 8px;
+    background: var(--pay-grad-bloom-mark);
+    display: grid; place-items: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .brand-mark::before {
+    content: "";
+    position: absolute; inset: 0;
+    background:
+      linear-gradient(180deg, transparent 25%, rgba(8,2,35,0.95) 25%, rgba(8,2,35,0.95) 35%, transparent 35%, transparent 50%, rgba(8,2,35,0.95) 50%, rgba(8,2,35,0.95) 60%, transparent 60%, transparent 70%, rgba(8,2,35,0.95) 70%, rgba(8,2,35,0.95) 80%, transparent 80%);
+    transform: scaleX(0.55);
+    transform-origin: left;
+  }
+  .brand-mark::after {
+    content: "";
+    position: absolute;
+    right: 7px; bottom: 6px;
+    width: 5px; height: 5px;
+    border-radius: 50%;
+    background: var(--pay-bg-0);
+  }
+  .brand-text {
+    display: flex; flex-direction: column;
+    line-height: 1;
+  }
+  .brand-name {
+    font-family: var(--pay-font-display);
+    text-transform: lowercase;
+    font-size: 16px;
+    letter-spacing: 0.02em;
+    color: var(--pay-fg-1);
+  }
+  .brand-sub {
+    font-size: 9px;
+    letter-spacing: 0.32em;
+    font-weight: 700;
+    color: var(--pay-brand);
+    margin-top: 4px;
+  }
+
+  .nav-links {
+    display: flex;
+    gap: var(--pay-space-1);
+    margin-left: var(--pay-space-5);
+  }
+  .nav-link {
+    height: 32px;
+    padding: 0 12px;
+    border-radius: var(--pay-radius-sm);
+    display: inline-flex; align-items: center;
+    color: var(--pay-fg-2);
+    text-decoration: none;
+    font-size: 13.5px;
+    font-weight: 500;
+    transition: background var(--pay-duration-fast) var(--pay-ease), color var(--pay-duration-fast) var(--pay-ease);
+  }
+  .nav-link:hover { background: var(--pay-surface-1); color: var(--pay-fg-1); }
+  .nav-link.is-active { color: var(--pay-fg-1); background: var(--pay-brand-subtle); }
+
+  .nav-spacer { flex: 1; }
+
+  .search {
+    width: 280px;
+    height: 36px;
+    padding: 0 12px 0 36px;
+    border-radius: var(--pay-radius-sm);
+    background: var(--pay-surface-1);
+    border: 1px solid var(--pay-border-2);
+    color: var(--pay-fg-1);
+    font-family: var(--pay-font-sans);
+    font-size: 13.5px;
+    outline: none;
+    transition: border-color var(--pay-duration-fast) var(--pay-ease), box-shadow var(--pay-duration-fast) var(--pay-ease);
+  }
+  .search::placeholder { color: var(--pay-fg-3); }
+  .search:focus { border-color: var(--pay-brand); box-shadow: var(--pay-shadow-glow); }
+  .search-wrap {
+    position: relative;
+  }
+  .search-wrap .icon {
+    position: absolute;
+    left: 11px; top: 50%;
+    transform: translateY(-50%);
+    color: var(--pay-fg-3);
+    pointer-events: none;
+  }
+  .search-kbd {
+    position: absolute;
+    right: 8px; top: 50%;
+    transform: translateY(-50%);
+    font-family: var(--pay-font-mono);
+    font-size: 10.5px;
+    color: var(--pay-fg-3);
+    background: var(--pay-bg-1);
+    border: 1px solid var(--pay-border-1);
+    border-radius: 4px;
+    padding: 2px 6px;
+    line-height: 1;
+  }
+
+  .icon-btn {
+    width: 36px; height: 36px;
+    border-radius: var(--pay-radius-sm);
+    background: var(--pay-surface-1);
+    border: 1px solid var(--pay-border-2);
+    color: var(--pay-fg-2);
+    display: grid; place-items: center;
+    cursor: pointer;
+    position: relative;
+    transition: all var(--pay-duration-fast) var(--pay-ease);
+  }
+  .icon-btn:hover { background: var(--pay-surface-2); color: var(--pay-fg-1); border-color: var(--pay-border-3); }
+  .icon-btn .dot {
+    position: absolute;
+    top: 8px; right: 8px;
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--pay-success);
+    box-shadow: 0 0 0 2px var(--pay-bg-0);
+  }
+
+  .avatar {
+    height: 36px;
+    padding: 0 12px 0 4px;
+    display: flex; align-items: center;
+    gap: 10px;
+    border-radius: var(--pay-radius-sm);
+    background: var(--pay-surface-1);
+    border: 1px solid var(--pay-border-2);
+    cursor: pointer;
+    transition: all var(--pay-duration-fast) var(--pay-ease);
+  }
+  .avatar:hover { background: var(--pay-surface-2); border-color: var(--pay-border-3); }
+  .avatar-img {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    background:
+      radial-gradient(circle at 30% 30%, #00FFB6 0%, #6632FA 60%, #2A0FA8 100%);
+    display: grid; place-items: center;
+    color: var(--pay-bg-0);
+    font-weight: 800;
+    font-size: 11px;
+    letter-spacing: 0.02em;
+  }
+  .avatar-meta { display: flex; flex-direction: column; line-height: 1.15; }
+  .avatar-name { font-size: 12.5px; font-weight: 600; color: var(--pay-fg-1); }
+  .avatar-handle { font-size: 11px; color: var(--pay-fg-3); font-family: var(--pay-font-mono); }
+  .avatar-chev { color: var(--pay-fg-3); margin-left: 2px; }
+
+  /* ---------- Page ---------- */
+  .page {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 32px 40px 80px;
+    display: flex;
+    flex-direction: column;
+    gap: 32px;
+  }
+  .crumb {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--pay-fg-3);
+    font-size: 12.5px;
+  }
+  .crumb .sep { opacity: 0.4; }
+  .page-head { display: flex; align-items: flex-end; justify-content: space-between; gap: 24px; }
+  .page-head h1 {
+    margin: 8px 0 0;
+    font-family: var(--pay-font-sans);
+    font-size: 36px;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
+    font-weight: 700;
+  }
+  .page-head p {
+    margin: 6px 0 0;
+    color: var(--pay-fg-2);
+    font-size: 14px;
+  }
+  .live-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    height: 28px;
+    padding: 0 12px 0 10px;
+    border-radius: var(--pay-radius-full);
+    background: var(--pay-success-subtle);
+    border: 1px solid rgba(0,255,182,0.22);
+    color: var(--pay-success);
+    font-size: 11.5px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    font-family: var(--pay-font-sans);
+  }
+  .live-pill .pulse {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--pay-success);
+    box-shadow: 0 0 0 3px rgba(0,255,182,0.22);
+    animation: pulse 1.8s var(--pay-ease) infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { box-shadow: 0 0 0 0 rgba(0,255,182,0.45); }
+    50% { box-shadow: 0 0 0 5px rgba(0,255,182,0.0); }
+  }
+
+  /* ---------- Hero wallet ---------- */
+  .hero {
+    position: relative;
+    background: var(--pay-grad-deep);
+    border: 1px solid var(--pay-border-2);
+    border-radius: var(--pay-radius-xl);
+    padding: 32px;
+    overflow: hidden;
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 32px;
+    isolation: isolate;
+  }
+  .hero::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background:
+      radial-gradient(60% 80% at 85% 30%, rgba(102,50,250,0.50) 0%, rgba(102,50,250,0) 60%),
+      radial-gradient(40% 60% at 100% 100%, rgba(0,255,182,0.25) 0%, rgba(0,255,182,0) 60%);
+    pointer-events: none;
+    z-index: -1;
+  }
+  .hero::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(242,242,247,0.035) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(242,242,247,0.035) 1px, transparent 1px);
+    background-size: 32px 32px;
+    background-position: 0 0;
+    -webkit-mask-image: radial-gradient(70% 70% at 20% 40%, black 0%, transparent 70%);
+            mask-image: radial-gradient(70% 70% at 20% 40%, black 0%, transparent 70%);
+    pointer-events: none;
+    z-index: -1;
+  }
+
+  .wallet-meta {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .wallet-row {
+    display: flex; align-items: center; gap: 10px;
+    color: var(--pay-fg-3);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    font-weight: 600;
+  }
+  .wallet-row .ccy-switch {
+    display: flex; align-items: center; gap: 4px;
+    background: rgba(242,242,247,0.06);
+    border: 1px solid var(--pay-border-2);
+    border-radius: var(--pay-radius-full);
+    padding: 4px;
+    text-transform: none;
+    letter-spacing: 0;
+  }
+  .ccy-opt {
+    height: 22px; padding: 0 10px;
+    border-radius: var(--pay-radius-full);
+    display: inline-flex; align-items: center;
+    font-family: var(--pay-font-mono);
+    font-size: 11px;
+    color: var(--pay-fg-3);
+    cursor: pointer;
+    transition: all var(--pay-duration-fast) var(--pay-ease);
+  }
+  .ccy-opt.is-active {
+    background: var(--pay-brand);
+    color: var(--pay-fg-1);
+  }
+  .ccy-opt:not(.is-active):hover { color: var(--pay-fg-1); }
+
+  .balance {
+    display: flex; align-items: baseline; gap: 8px;
+    font-family: var(--pay-font-sans);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    font-variant-numeric: tabular-nums;
+  }
+  .balance .sign { font-size: 36px; color: var(--pay-fg-2); margin-right: 2px; }
+  .balance .whole { font-size: 76px; line-height: 1; color: var(--pay-fg-1); }
+  .balance .frac { font-size: 36px; color: var(--pay-fg-2); }
+  .balance .ccy {
+    font-family: var(--pay-font-mono);
+    font-size: 14px;
+    color: var(--pay-fg-3);
+    margin-left: 8px;
+    letter-spacing: 0.06em;
+  }
+
+  .balance-foot {
+    display: flex; align-items: center; gap: 20px;
+    color: var(--pay-fg-2);
+    font-size: 13.5px;
+  }
+  .delta {
+    display: inline-flex; align-items: center; gap: 4px;
+    color: var(--pay-success);
+    font-family: var(--pay-font-mono);
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .balance-foot .sep { width: 1px; height: 14px; background: var(--pay-border-2); display: inline-block; }
+
+  .wallet-actions { display: flex; gap: 12px; margin-top: 16px; }
+  .btn {
+    height: 44px;
+    padding: 0 18px;
+    border-radius: var(--pay-radius-sm);
+    border: 1px solid transparent;
+    font-family: var(--pay-font-sans);
+    font-size: 14px;
+    font-weight: 600;
+    letter-spacing: 0;
+    cursor: pointer;
+    display: inline-flex; align-items: center; gap: 10px;
+    transition: all var(--pay-duration-fast) var(--pay-ease);
+  }
+  .btn-primary {
+    background: var(--pay-brand);
+    color: var(--pay-fg-1);
+    box-shadow: 0 0 0 1px var(--pay-brand-press) inset, 0 6px 20px rgba(102,50,250,0.35);
+  }
+  .btn-primary:hover { background: var(--pay-brand-hover); }
+  .btn-primary:active { background: var(--pay-brand-press); }
+  .btn-ghost {
+    background: rgba(242,242,247,0.04);
+    color: var(--pay-fg-1);
+    border-color: var(--pay-border-2);
+  }
+  .btn-ghost:hover { background: rgba(242,242,247,0.08); border-color: var(--pay-border-3); }
+
+  /* Hero welcome (left) */
+  .hero-welcome { display: flex; flex-direction: column; gap: 18px; align-self: center; }
+  .hero-title {
+    margin: 0;
+    font-family: var(--pay-font-sans);
+    font-size: 52px;
+    line-height: 1.0;
+    letter-spacing: -0.02em;
+    font-weight: 700;
+    color: var(--pay-fg-1);
+  }
+  .hero-body { margin: 0; max-width: 460px; color: var(--pay-fg-2); font-size: 15px; line-height: 1.55; }
+  .hero-actions { display: flex; gap: 12px; margin-top: 4px; }
+  .hero-stats { display: flex; gap: 36px; margin-top: 12px; }
+  .hero-stat { display: flex; flex-direction: column; gap: 2px; }
+  .hero-stat-n { font-family: var(--pay-font-sans); font-weight: 700; font-size: 22px; color: var(--pay-fg-1); letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+  .hero-stat-l { font-size: 11px; color: var(--pay-fg-3); letter-spacing: 0.14em; text-transform: uppercase; font-weight: 600; }
+
+  /* Featured services rail (hero right) */
+  .featured { display: flex; flex-direction: column; gap: 10px; align-self: stretch; }
+  .featured-card {
+    position: relative;
+    display: grid;
+    grid-template-columns: 48px 1fr auto;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: rgba(8,2,35,0.55);
+    border: 1px solid var(--pay-border-2);
+    border-radius: var(--pay-radius-md);
+    color: var(--pay-fg-1);
+    text-decoration: none;
+    transition: all var(--pay-duration-fast) var(--pay-ease);
+  }
+  .featured-card:hover { background: rgba(36,27,82,0.65); border-color: var(--pay-border-3); transform: translateY(-1px); }
+  .featured-card.is-primary {
+    background: linear-gradient(135deg, rgba(102,50,250,0.30) 0%, rgba(102,50,250,0.10) 100%);
+    border-color: rgba(102,50,250,0.45);
+  }
+  .featured-card.is-primary:hover { background: linear-gradient(135deg, rgba(102,50,250,0.40) 0%, rgba(102,50,250,0.15) 100%); }
+  .featured-card-logo {
+    width: 48px; height: 48px;
+    border-radius: var(--pay-radius-sm);
+    overflow: hidden;
+  }
+  .featured-card-logo img { width: 100%; height: 100%; display: block; }
+  .featured-card-main { min-width: 0; display: flex; flex-direction: column; gap: 4px; }
+  .featured-card-name { font-size: 15px; font-weight: 700; color: var(--pay-fg-1); line-height: 1.15; }
+  .featured-card-sub { font-size: 12.5px; color: var(--pay-fg-3); }
+  .featured-flag {
+    grid-column: 3;
+    grid-row: 1;
+    align-self: start;
+    margin-top: 2px;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pay-fg-2);
+    background: rgba(242,242,247,0.08);
+    border: 1px solid var(--pay-border-2);
+    border-radius: var(--pay-radius-full);
+    padding: 3px 8px;
+    line-height: 1;
+  }
+  .featured-flag.is-brand { color: var(--pay-fg-1); background: var(--pay-brand-subtle); border-color: var(--pay-brand-ring); }
+  .featured-flag.is-bloom { color: var(--pay-success); background: var(--pay-success-subtle); border-color: rgba(0,255,182,0.22); }
+  .featured-arrow { color: var(--pay-fg-3); grid-column: 3; grid-row: 2; justify-self: end; align-self: end; transition: transform var(--pay-duration-fast) var(--pay-ease); }
+  .featured-card:hover .featured-arrow { transform: translateX(2px); color: var(--pay-fg-1); }
+
+  /* (legacy) Hero right side — quick action stack */
+  .actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+    align-content: start;
+  }
+  .action {
+    position: relative;
+    background: rgba(8,2,35,0.45);
+    border: 1px solid var(--pay-border-2);
+    border-radius: var(--pay-radius-md);
+    padding: 16px;
+    text-align: left;
+    color: var(--pay-fg-1);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all var(--pay-duration-fast) var(--pay-ease);
+    text-decoration: none;
+  }
+  .action:hover { background: rgba(36,27,82,0.55); border-color: var(--pay-border-3); transform: translateY(-1px); }
+  .action.is-primary {
+    background: linear-gradient(135deg, rgba(102,50,250,0.30) 0%, rgba(102,50,250,0.10) 100%);
+    border-color: rgba(102,50,250,0.45);
+  }
+  .action.is-primary:hover { background: linear-gradient(135deg, rgba(102,50,250,0.40) 0%, rgba(102,50,250,0.15) 100%); }
+  .action .ico {
+    width: 36px; height: 36px;
+    border-radius: var(--pay-radius-sm);
+    background: rgba(242,242,247,0.06);
+    border: 1px solid var(--pay-border-1);
+    display: grid; place-items: center;
+    color: var(--pay-fg-1);
+  }
+  .action.is-primary .ico { background: var(--pay-brand); border-color: rgba(0,0,0,0.3); }
+  .action .label {
+    font-size: 14px; font-weight: 700;
+    color: var(--pay-fg-1);
+  }
+  .action .hint {
+    font-size: 12px;
+    color: var(--pay-fg-3);
+    margin-top: -8px;
+  }
+  .action .arrow {
+    position: absolute;
+    top: 14px; right: 14px;
+    color: var(--pay-fg-3);
+    opacity: 0;
+    transition: opacity var(--pay-duration-fast) var(--pay-ease), transform var(--pay-duration-fast) var(--pay-ease);
+  }
+  .action:hover .arrow { opacity: 1; transform: translate(2px, -2px); }
+
+  /* ---------- Two-col main ---------- */
+  .grid-main {
+    display: grid;
+    grid-template-columns: 1.55fr 1fr;
+    gap: 24px;
+  }
+
+  /* ---------- Card ---------- */
+  .card {
+    background: var(--pay-surface-1);
+    border: 1px solid var(--pay-border-2);
+    border-radius: var(--pay-radius-lg);
+    padding: 24px;
+    display: flex; flex-direction: column; gap: 20px;
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+  }
+  .card-title {
+    font-size: 17px;
+    font-weight: 700;
+    color: var(--pay-fg-1);
+    letter-spacing: -0.005em;
+  }
+  .card-sub {
+    color: var(--pay-fg-3);
+    font-size: 12.5px;
+    margin-top: 4px;
+  }
+  .card-link {
+    color: var(--pay-fg-2);
+    font-size: 12.5px;
+    text-decoration: none;
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 28px;
+    padding: 0 10px;
+    border-radius: var(--pay-radius-sm);
+    transition: all var(--pay-duration-fast) var(--pay-ease);
+  }
+  .card-link:hover { color: var(--pay-fg-1); background: var(--pay-surface-2); }
+
+  /* Tabs (popular services) */
+  .tabs { display: flex; gap: 4px; padding: 4px; background: var(--pay-bg-1); border: 1px solid var(--pay-border-1); border-radius: var(--pay-radius-full); }
+  .tab {
+    height: 28px;
+    padding: 0 12px;
+    border-radius: var(--pay-radius-full);
+    color: var(--pay-fg-3);
+    font-size: 12px;
+    font-weight: 600;
+    display: inline-flex; align-items: center; gap: 6px;
+    cursor: pointer;
+    transition: all var(--pay-duration-fast) var(--pay-ease);
+    background: transparent;
+    border: none;
+    font-family: inherit;
+  }
+  .tab:hover { color: var(--pay-fg-1); }
+  .tab.is-active { background: var(--pay-surface-2); color: var(--pay-fg-1); }
+  .tab .count {
+    font-family: var(--pay-font-mono);
+    font-size: 10.5px;
+    color: var(--pay-fg-3);
+    background: var(--pay-bg-0);
+    padding: 1px 6px;
+    border-radius: var(--pay-radius-full);
+  }
+
+  /* Service tile grid */
+  .services {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+  }
+  .service {
+    position: relative;
+    background: var(--pay-bg-1);
+    border: 1px solid var(--pay-border-1);
+    border-radius: var(--pay-radius-md);
+    padding: 16px;
+    cursor: pointer;
+    text-decoration: none;
+    color: var(--pay-fg-1);
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    transition: all var(--pay-duration-fast) var(--pay-ease);
+  }
+  .service:hover {
+    background: var(--pay-surface-2);
+    border-color: var(--pay-border-3);
+    transform: translateY(-1px);
+  }
+  .service:active { transform: translateY(0); box-shadow: 0 0 0 1px var(--pay-brand) inset; }
+  .service-logo {
+    width: 44px; height: 44px;
+    border-radius: var(--pay-radius-sm);
+    overflow: hidden;
+  }
+  .service-logo img { width: 100%; height: 100%; display: block; }
+  .service-name { font-size: 14px; font-weight: 700; color: var(--pay-fg-1); line-height: 1.2; }
+  .service-meta {
+    display: flex; align-items: center; gap: 8px;
+    color: var(--pay-fg-3);
+    font-size: 11.5px;
+  }
+  .service-meta .from {
+    font-family: var(--pay-font-mono);
+    color: var(--pay-fg-2);
+  }
+  .service-meta .dot-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--pay-fg-4); }
+  .service-badge {
+    position: absolute;
+    top: 12px; right: 12px;
+    font-size: 9.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--pay-success);
+    background: var(--pay-success-subtle);
+    border: 1px solid rgba(0,255,182,0.22);
+    border-radius: var(--pay-radius-full);
+    padding: 3px 8px;
+    line-height: 1;
+  }
+  .service-badge.is-brand {
+    color: var(--pay-fg-1);
+    background: var(--pay-brand-subtle);
+    border-color: var(--pay-brand-ring);
+  }
+
+  /* ---------- Transactions ---------- */
+  .txs {
+    display: flex; flex-direction: column;
+    gap: 0;
+  }
+  .tx {
+    display: grid;
+    grid-template-columns: 36px 1fr auto;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 0;
+    border-bottom: 1px solid var(--pay-border-1);
+  }
+  .tx:last-child { border-bottom: none; padding-bottom: 0; }
+  .tx:first-child { padding-top: 0; }
+  .tx-logo {
+    width: 36px; height: 36px;
+    border-radius: var(--pay-radius-sm);
+    overflow: hidden;
+  }
+  .tx-logo img { width: 100%; height: 100%; display: block; }
+  .tx-main { min-width: 0; }
+  .tx-title { font-size: 13.5px; font-weight: 600; color: var(--pay-fg-1); line-height: 1.2; }
+  .tx-sub {
+    margin-top: 4px;
+    font-size: 11.5px;
+    color: var(--pay-fg-3);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .tx-sub .id { font-family: var(--pay-font-mono); color: var(--pay-fg-2); }
+  .tx-sub .dot-sep { width: 3px; height: 3px; border-radius: 50%; background: var(--pay-fg-4); }
+  .tx-right { text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+  .tx-amount {
+    font-family: var(--pay-font-sans);
+    font-weight: 700;
+    font-size: 14px;
+    color: var(--pay-fg-1);
+    font-variant-numeric: tabular-nums;
+    letter-spacing: -0.005em;
+  }
+  .tx-status {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--pay-fg-3);
+    text-transform: lowercase;
+  }
+  .tx-status .stdot { width: 5px; height: 5px; border-radius: 50%; }
+  .tx-status.is-success { color: var(--pay-success-fg); }
+  .tx-status.is-success .stdot { background: var(--pay-success); }
+  .tx-status.is-pending { color: var(--pay-warning); }
+  .tx-status.is-pending .stdot { background: var(--pay-warning); }
+  .tx-status.is-failed { color: var(--pay-danger); }
+  .tx-status.is-failed .stdot { background: var(--pay-danger); }
+
+  /* ---------- icons ---------- */
+  .i { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 1.5; stroke-linecap: round; stroke-linejoin: round; }
+  .i-20 { width: 20px; height: 20px; }
+  .i-24 { width: 24px; height: 24px; }
+
+  /* Tiny utility */
+  .stack { display: flex; flex-direction: column; gap: 8px; }
+  .row { display: flex; align-items: center; gap: 8px; }
+</style>
+</head>
+<body>
+<div class="app">
+
+  <!-- ============ TOP NAV ============ -->
+  <nav class="topnav">
+    <a class="brand" href="#">
+      <span class="brand-mark" aria-hidden="true"></span>
+      <span class="brand-text">
+        <span class="brand-name">full focus</span>
+        <span class="brand-sub">PAY</span>
+      </span>
+    </a>
+
+    <div class="nav-links">
+      <a class="nav-link is-active" href="#">Dashboard</a>
+      <a class="nav-link" href="#">Top up</a>
+      <a class="nav-link" href="#">Services</a>
+      <a class="nav-link" href="#">Orders</a>
+      <a class="nav-link" href="#">Help</a>
+    </div>
+
+    <div class="nav-spacer"></div>
+
+    <div class="search-wrap">
+      <svg class="i icon" viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>
+      <input class="search" type="text" placeholder="Search services, transactions, gift cards"/>
+      <span class="search-kbd">⌘K</span>
+    </div>
+
+    <button class="icon-btn" aria-label="Notifications">
+      <svg class="i i-20" viewBox="0 0 24 24"><path d="M6 8a6 6 0 1 1 12 0c0 7 3 7 3 9H3c0-2 3-2 3-9Z"/><path d="M10 21a2 2 0 0 0 4 0"/></svg>
+      <span class="dot"></span>
+    </button>
+
+    <button class="avatar" aria-label="Account menu">
+      <span class="avatar-img">AK</span>
+      <span class="avatar-meta">
+        <span class="avatar-name">Anton K.</span>
+        <span class="avatar-handle">@antonk</span>
+      </span>
+      <svg class="i avatar-chev" viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
+  </nav>
+
+  <!-- ============ PAGE ============ -->
+  <main class="page">
+
+    <!-- Page head -->
+    <div class="page-head">
+      <div>
+        <div class="crumb">
+          <span>Home</span>
+          <span class="sep">/</span>
+          <span style="color: var(--pay-fg-2);">Dashboard</span>
+        </div>
+        <h1>Hi Anton.</h1>
+        <p>Top up <strong style="color:var(--pay-fg-1); font-weight:600;">187 services</strong> directly. Pay with card or USDT, delivery in under 60 seconds.</p>
+      </div>
+      <span class="live-pill">
+        <span class="pulse"></span>
+        All systems live
+      </span>
+    </div>
+
+    <!-- HERO — welcome + featured services -->
+    <section class="hero">
+      <div class="hero-welcome">
+        <span class="pay-eyebrow" style="color: var(--pay-brand-hover);">featured this week</span>
+        <h2 class="hero-title">Pay direct. Play&nbsp;sooner.</h2>
+        <p class="hero-body">No wallet, no waiting. Pick a service, choose an amount, pay with card or USDT — your account is credited in under a minute.</p>
+        <div class="hero-actions">
+          <button class="btn btn-primary">
+            <svg class="i i-20" viewBox="0 0 24 24"><path d="M3 12h14M11 6l6 6-6 6"/></svg>
+            Browse all services
+          </button>
+          <button class="btn btn-ghost">
+            <svg class="i" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 12h8M12 8v8"/></svg>
+            Pay with USDT · −10%
+          </button>
+        </div>
+        <div class="hero-stats">
+          <div class="hero-stat"><span class="hero-stat-n">187</span><span class="hero-stat-l">services</span></div>
+          <div class="hero-stat"><span class="hero-stat-n">42s</span><span class="hero-stat-l">avg. delivery</span></div>
+          <div class="hero-stat"><span class="hero-stat-n">98.4%</span><span class="hero-stat-l">success rate · 30d</span></div>
+        </div>
+      </div>
+
+      <!-- featured services rail -->
+      <div class="featured">
+        <a class="featured-card is-primary" href="#">
+          <div class="featured-card-logo"><img src="assets/services/steam.svg" alt=""></div>
+          <div class="featured-card-main">
+            <div class="featured-card-name">Steam wallet</div>
+            <div class="featured-card-sub">$5 – $500 · instant</div>
+          </div>
+          <span class="featured-flag is-bloom">−10% USDT</span>
+          <svg class="i i-20 featured-arrow" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+        <a class="featured-card" href="#">
+          <div class="featured-card-logo"><img src="assets/services/openai.svg" alt=""></div>
+          <div class="featured-card-main">
+            <div class="featured-card-name">ChatGPT Plus</div>
+            <div class="featured-card-sub">$20 / month · auto-renew</div>
+          </div>
+          <span class="featured-flag is-brand">popular</span>
+          <svg class="i i-20 featured-arrow" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+        <a class="featured-card" href="#">
+          <div class="featured-card-logo"><img src="assets/services/discord.svg" alt=""></div>
+          <div class="featured-card-main">
+            <div class="featured-card-name">Discord Nitro</div>
+            <div class="featured-card-sub">$9.99 / month · 1 month free</div>
+          </div>
+          <span class="featured-flag">new offer</span>
+          <svg class="i i-20 featured-arrow" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+        </a>
+      </div>
+    </section>
+
+    <!-- Main grid -->
+    <section class="grid-main">
+
+      <!-- Popular services -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Popular services</div>
+            <div class="card-sub">Top up your favorites in two taps. No fees on the first $50.</div>
+          </div>
+          <div class="tabs" role="tablist">
+            <button class="tab is-active">All <span class="count">187</span></button>
+            <button class="tab">Games</button>
+            <button class="tab">AI</button>
+            <button class="tab">Streaming</button>
+          </div>
+        </div>
+
+        <div class="services">
+          <a class="service" href="#">
+            <div class="service-logo"><img src="assets/services/steam.svg" alt=""></div>
+            <div>
+              <div class="service-name">Steam</div>
+              <div class="service-meta"><span class="from">from $5</span><span class="dot-sep"></span><span>instant</span></div>
+            </div>
+            <span class="service-badge">popular</span>
+          </a>
+          <a class="service" href="#">
+            <div class="service-logo"><img src="assets/services/epic.svg" alt=""></div>
+            <div>
+              <div class="service-name">Epic Games</div>
+              <div class="service-meta"><span class="from">from $10</span><span class="dot-sep"></span><span>instant</span></div>
+            </div>
+          </a>
+          <a class="service" href="#">
+            <div class="service-logo"><img src="assets/services/discord.svg" alt=""></div>
+            <div>
+              <div class="service-name">Discord Nitro</div>
+              <div class="service-meta"><span class="from">$9.99/mo</span><span class="dot-sep"></span><span>monthly</span></div>
+            </div>
+          </a>
+          <a class="service" href="#">
+            <div class="service-logo"><img src="assets/services/openai.svg" alt=""></div>
+            <div>
+              <div class="service-name">ChatGPT Plus</div>
+              <div class="service-meta"><span class="from">$20/mo</span><span class="dot-sep"></span><span>monthly</span></div>
+            </div>
+            <span class="service-badge is-brand">AI</span>
+          </a>
+
+          <a class="service" href="#">
+            <div class="service-logo"><img src="assets/services/claude.svg" alt=""></div>
+            <div>
+              <div class="service-name">Claude Pro</div>
+              <div class="service-meta"><span class="from">$20/mo</span><span class="dot-sep"></span><span>monthly</span></div>
+            </div>
+            <span class="service-badge is-brand">AI</span>
+          </a>
+          <a class="service" href="#">
+            <div class="service-logo"><img src="assets/services/playstation.svg" alt=""></div>
+            <div>
+              <div class="service-name">PlayStation</div>
+              <div class="service-meta"><span class="from">from $10</span><span class="dot-sep"></span><span>instant</span></div>
+            </div>
+          </a>
+          <a class="service" href="#">
+            <div class="service-logo"><img src="assets/services/riot.svg" alt=""></div>
+            <div>
+              <div class="service-name">Riot · Valorant</div>
+              <div class="service-meta"><span class="from">from $5</span><span class="dot-sep"></span><span>instant</span></div>
+            </div>
+          </a>
+          <a class="service" href="#">
+            <div class="service-logo"><img src="assets/services/spotify.svg" alt=""></div>
+            <div>
+              <div class="service-name">Spotify</div>
+              <div class="service-meta"><span class="from">$10.99/mo</span><span class="dot-sep"></span><span>monthly</span></div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+      <!-- Recent transactions -->
+      <div class="card">
+        <div class="card-head">
+          <div>
+            <div class="card-title">Recent orders</div>
+            <div class="card-sub">Last 30 days · 142 orders</div>
+          </div>
+          <a class="card-link" href="#">
+            View all
+            <svg class="i" viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg>
+          </a>
+        </div>
+
+        <div class="txs">
+          <div class="tx">
+            <div class="tx-logo"><img src="assets/services/steam.svg" alt=""></div>
+            <div class="tx-main">
+              <div class="tx-title">Steam wallet · $50</div>
+              <div class="tx-sub"><span class="id">FFP-9X4A2K</span><span class="dot-sep"></span><span>just now</span><span class="dot-sep"></span><span>card · 4242</span></div>
+            </div>
+            <div class="tx-right">
+              <div class="tx-amount">$50.00</div>
+              <div class="tx-status is-success"><span class="stdot"></span>delivered</div>
+            </div>
+          </div>
+
+          <div class="tx">
+            <div class="tx-logo"><img src="assets/services/openai.svg" alt=""></div>
+            <div class="tx-main">
+              <div class="tx-title">ChatGPT Plus · 1 month</div>
+              <div class="tx-sub"><span class="id">FFP-71PQ8R</span><span class="dot-sep"></span><span>2h ago</span><span class="dot-sep"></span><span>USDT TRC-20</span></div>
+            </div>
+            <div class="tx-right">
+              <div class="tx-amount">$18.00</div>
+              <div class="tx-status is-success"><span class="stdot"></span>delivered</div>
+            </div>
+          </div>
+
+          <div class="tx">
+            <div class="tx-logo"><img src="assets/services/spotify.svg" alt=""></div>
+            <div class="tx-main">
+              <div class="tx-title">Spotify Premium · 3 months</div>
+              <div class="tx-sub"><span class="id">FFP-66HV01</span><span class="dot-sep"></span><span>yesterday, 21:08</span><span class="dot-sep"></span><span>card · 4242</span></div>
+            </div>
+            <div class="tx-right">
+              <div class="tx-amount">$29.97</div>
+              <div class="tx-status is-success"><span class="stdot"></span>delivered</div>
+            </div>
+          </div>
+
+          <div class="tx">
+            <div class="tx-logo"><img src="assets/services/discord.svg" alt=""></div>
+            <div class="tx-main">
+              <div class="tx-title">Discord Nitro · 1 month</div>
+              <div class="tx-sub"><span class="id">FFP-44GH02</span><span class="dot-sep"></span><span>yesterday, 18:42</span><span class="dot-sep"></span><span>card · 4242</span></div>
+            </div>
+            <div class="tx-right">
+              <div class="tx-amount">$9.99</div>
+              <div class="tx-status is-success"><span class="stdot"></span>delivered</div>
+            </div>
+          </div>
+
+          <div class="tx">
+            <div class="tx-logo"><img src="assets/services/riot.svg" alt=""></div>
+            <div class="tx-main">
+              <div class="tx-title">Valorant · 1000 VP</div>
+              <div class="tx-sub"><span class="id">FFP-22LK91</span><span class="dot-sep"></span><span>2 days ago</span><span class="dot-sep"></span><span>USDT TRC-20</span></div>
+            </div>
+            <div class="tx-right">
+              <div class="tx-amount">$9.99</div>
+              <div class="tx-status is-pending"><span class="stdot"></span>processing</div>
+            </div>
+          </div>
+
+          <div class="tx">
+            <div class="tx-logo"><img src="assets/services/epic.svg" alt=""></div>
+            <div class="tx-main">
+              <div class="tx-title">Epic Games · gift card $25</div>
+              <div class="tx-sub"><span class="id">FFP-08ZM55</span><span class="dot-sep"></span><span>3 days ago</span><span class="dot-sep"></span><span>card · 4242</span></div>
+            </div>
+            <div class="tx-right">
+              <div class="tx-amount">$25.00</div>
+              <div class="tx-status is-success"><span class="stdot"></span>delivered</div>
+            </div>
+          </div>
+
+          <div class="tx">
+            <div class="tx-logo"><img src="assets/services/claude.svg" alt=""></div>
+            <div class="tx-main">
+              <div class="tx-title">Claude Pro · 1 month</div>
+              <div class="tx-sub"><span class="id">FFP-91RT37</span><span class="dot-sep"></span><span>5 days ago</span><span class="dot-sep"></span><span>card · 4242</span></div>
+            </div>
+            <div class="tx-right">
+              <div class="tx-amount">$20.00</div>
+              <div class="tx-status is-failed"><span class="stdot"></span>card refused</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+</div>
+</body>
+</html>
