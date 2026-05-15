@@ -1,16 +1,5 @@
 @import "tailwindcss";
 
-@font-face {
-  font-family: "Audiowide";
-  src: url("/fonts/Audiowide-Regular.ttf") format("truetype");
-  font-weight: 400;
-  font-style: normal;
-  font-display: swap;
-}
-
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@300;400;500;600;700;800&display=swap");
-@import url("https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&display=swap");
-
 :root {
   --ff-glitch-core:  #6632FA;
   --ff-deep-memory:  #080223;
@@ -60,9 +49,10 @@
   --pay-grad-bloom-mark: linear-gradient(135deg, #00FFB6 0%, #6632FA 100%);
   --pay-grad-deep:    linear-gradient(180deg, #110933 0%, #080223 100%);
 
-  --pay-font-display: "Audiowide", system-ui, sans-serif;
-  --pay-font-sans:    "Manrope", -apple-system, BlinkMacSystemFont, "Segoe UI", system-ui, sans-serif;
-  --pay-font-mono:    "JetBrains Mono", ui-monospace, "SF Mono", Menlo, Consolas, monospace;
+  --pay-font-display: var(--font-audiowide), system-ui, sans-serif;
+  --pay-font-sans:    var(--font-grandis), system-ui, sans-serif;
+  --pay-font-heading: var(--font-magistral), var(--font-grandis), system-ui, sans-serif;
+  --pay-font-mono:    ui-monospace, "SF Mono", Menlo, Consolas, monospace;
 
   --pay-radius-xs:    4px;
   --pay-radius-sm:    8px;
@@ -94,6 +84,10 @@ html, body {
   font-size: 15px;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--pay-font-heading);
 }
 
 @keyframes pulse-dot {

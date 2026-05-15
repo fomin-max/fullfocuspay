@@ -17,7 +17,12 @@ async function getGroups() {
 
 export const metadata = { title: 'Services — Full Focus Pay' }
 
-export default async function ServicesPage() {
+export default async function ServicesPage({
+  searchParams,
+}: {
+  searchParams: Promise<{ q?: string }>
+}) {
+  const { q } = await searchParams
   const groups = await getGroups()
   const t = await getTranslations('services')
 
@@ -31,7 +36,7 @@ export default async function ServicesPage() {
         <p style={{ margin: '0 0 32px', fontSize: 15, color: 'var(--pay-fg-3)' }}>
           {t('subtitle', { count: groups.length })}
         </p>
-        <GroupsGrid groups={groups} />
+        <GroupsGrid groups={groups} initialQuery={q ?? ''} />
       </main>
     </div>
   )

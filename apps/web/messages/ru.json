@@ -32,7 +32,9 @@
     "all": "Все",
     "games": "Игры",
     "business": "Бизнес",
-    "count": "{count} сервисов"
+    "count": "{count} сервисов",
+    "searchPlaceholder": "Поиск сервиса...",
+    "noResults": "Ничего не найдено по «{query}»"
   },
   "products": {
     "types": {
@@ -43,9 +45,58 @@
     },
     "buy": "Купить",
     "empty": "Нет доступных товаров для этого сервиса.",
-    "outOfStock": "Нет в наличии — обработка возможна"
+    "outOfStock": "Нет в наличии",
+    "outOfStockHint": "Нет в наличии — обработка возможна",
+    "filters": {
+      "price": "Цена",
+      "currency": "Валюта",
+      "all": "Все",
+      "lt500": "до 500 ₽",
+      "r500": "500–2000 ₽",
+      "r2000": "2000–5000 ₽",
+      "gt5000": "от 5000 ₽",
+      "allCurrencies": "Все валюты",
+      "country": "Страна",
+      "allCountries": "Все страны",
+      "results": "{count} товаров",
+      "inStockOnly": "Только в наличии"
+    }
   },
   "checkout": {
+    "steps": {
+      "service": "Сервис",
+      "payment": "Оплата",
+      "confirm": "Подтверждение"
+    },
+    "tags": {
+      "instant": "Мгновенная доставка",
+      "secure": "СБП · без комиссии"
+    },
+    "aside": {
+      "status": "Статус",
+      "inStock": "В наличии",
+      "outOfStock": "Нет в наличии",
+      "payment": "Оплата",
+      "paymentValue": "СБП"
+    },
+    "payMethod": {
+      "title": "Способ оплаты",
+      "sbpName": "СБП",
+      "sbpSub": "Быстрые переводы · мгновенно · без комиссии",
+      "sbpFlag": "рекомендуем",
+      "cardName": "Карта · Visa / Mastercard",
+      "cardSub": "3-D Secure · обрабатывается банком",
+      "cardFlag": "скоро",
+      "usdtName": "USDT · TRC-20",
+      "usdtSub": "Сеть TRON · 1 подтверждение",
+      "usdtFlag": "скоро"
+    },
+    "eta": {
+      "title": "Доставка за ~42 секунды",
+      "sub": "После подтверждения оплаты через СБП",
+      "start": "СБП оплата",
+      "end": "получено"
+    },
     "yourDetails": "Ваши данные",
     "email": "Email",
     "emailHint": "На этот адрес придёт ключ, если потребуется",

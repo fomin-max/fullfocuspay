@@ -1,5 +1,5 @@
 'use client'
-import { useState } from 'react'
+import { useState, useRef, useCallback } from 'react'
 import { useRouter } from 'next/navigation'
 import { useTranslations } from 'next-intl'
 import s from './CheckoutForm.module.css'
@@ -42,29 +42,44 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
   const price = product.price ?? product.retail_price ?? 0
 
   const [values, setValues] = useState<Record<string, string>>({})
-  const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+  const [apiError, setApiError] = useState('')
   const [loading, setLoading] = useState(false)
+  const fieldRefs = useRef<Record<string, HTMLInputElement | HTMLSelectElement | null>>({})
 
   function set(name: string, value: string) {
     setValues((v) => ({ ...v, [name]: value }))
-    setError('')
+    setFieldErrors((e) => { const next = { ...e }; delete next[name]; return next })
+    setApiError('')
   }
+
+  const failField = useCallback((name: string, msg: string) => {
+    setFieldErrors({ [name]: msg })
+    setTimeout(() => {
+      const el = fieldRefs.current[name]
+      if (el) {
+        el.scrollIntoView({ behavior: 'smooth', block: 'center' })
+        el.focus()
+      }
+    }, 30)
+  }, [])
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault()
-    setError('')
+    setFieldErrors({})
+    setApiError('')
 
     // Basic validation
     if (isVoucher) {
       const email = values.email?.trim()
       if (!email || !email.includes('@')) {
-        setError(t('errors.emailRequired'))
+        failField('email', t('errors.emailRequired'))
         return
       }
     } else {
       for (const field of topupFields) {
         if (field.type === 'text' && !values[field.name]?.trim()) {
-          setError(t('errors.fieldRequired', { field: field.label }))
+          failField(field.name, t('errors.fieldRequired', { field: field.label }))
           return
         }
       }
@@ -117,7 +132,7 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
       // Redirect to SBP payment
       window.location.href = payUrl
     } catch (e: any) {
-      setError(e.message || t('errors.generic'))
+      setApiError(e.message || t('errors.generic'))
       setLoading(false)
     }
   }
@@ -128,21 +143,14 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
     <div className={s.layout}>
       {/* Left: form */}
       <div className={s.formSide}>
-        <div className={s.productHeader}>
-          <div className={s.productMeta}>
-            <span className={s.typeBadge}>{isVoucher ? 'Gift card / Key' : 'Top-up'}</span>
-            {product.region && <span className={s.regionBadge}>{product.region}</span>}
+        {outOfStock && (
+          <div className={s.outOfStock}>
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+            </svg>
+            {tp('outOfStockHint')}
           </div>
-          <h1 className={s.productName}>{product.name}</h1>
-          {outOfStock && (
-            <div className={s.outOfStock}>
-              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-                <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
-              </svg>
-              {tp('outOfStock')}
-            </div>
-          )}
-        </div>
+        )}
 
         <form onSubmit={handleSubmit} className={s.form}>
           <div className={s.section}>
@@ -157,6 +165,8 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
                 placeholder="you@example.com"
                 value={values.email ?? ''}
                 onChange={(v) => set('email', v)}
+                error={fieldErrors.email}
+                inputRef={(el) => { fieldRefs.current.email = el }}
               />
             ) : (
               topupFields.map((field) => (
@@ -169,6 +179,8 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
                     value={values[field.name] ?? ''}
                     onChange={(v) => set(field.name, v)}
                     placeholder={t('selectPlaceholder')}
+                    error={fieldErrors[field.name]}
+                    selectRef={(el) => { fieldRefs.current[field.name] = el }}
                   />
                 ) : (
                   <Field
@@ -179,24 +191,75 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
                     placeholder={field.label}
                     value={values[field.name] ?? ''}
                     onChange={(v) => set(field.name, v)}
+                    error={fieldErrors[field.name]}
+                    inputRef={(el) => { fieldRefs.current[field.name] = el }}
                   />
                 )
-
               ))
             )}
           </div>
 
-          {error && (
+          {/* Payment method */}
+          <div className={s.section}>
+            <div className={s.sectionTitle}>{t('payMethod.title')}</div>
+
+            {/* SBP — active */}
+            <div className={`${s.method} ${s.methodSelected}`}>
+              <span className={`${s.methodRadio} ${s.methodRadioSelected}`} />
+              <span className={s.methodIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>
+                </svg>
+              </span>
+              <span className={s.methodBody}>
+                <span className={s.methodName}>{t('payMethod.sbpName')}</span>
+                <span className={s.methodSub}>{t('payMethod.sbpSub')}</span>
+              </span>
+              <span className={`${s.methodFlag} ${s.methodFlagBloom}`}>{t('payMethod.sbpFlag')}</span>
+            </div>
+
+            {/* Card — disabled, coming soon */}
+            <div className={`${s.method} ${s.methodDisabled}`}>
+              <span className={s.methodRadio} />
+              <span className={s.methodIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>
+                </svg>
+              </span>
+              <span className={s.methodBody}>
+                <span className={s.methodName}>{t('payMethod.cardName')}</span>
+                <span className={s.methodSub}>{t('payMethod.cardSub')}</span>
+              </span>
+              <span className={s.methodFlag}>{t('payMethod.cardFlag')}</span>
+            </div>
+
+            {/* USDT — disabled, coming soon */}
+            <div className={`${s.method} ${s.methodDisabled}`}>
+              <span className={s.methodRadio} />
+              <span className={s.methodIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <circle cx="12" cy="12" r="9"/><path d="M9 12h6M12 9v6"/>
+                </svg>
+              </span>
+              <span className={s.methodBody}>
+                <span className={s.methodName}>{t('payMethod.usdtName')}</span>
+                <span className={s.methodSub}>{t('payMethod.usdtSub')}</span>
+              </span>
+              <span className={s.methodFlag}>{t('payMethod.usdtFlag')}</span>
+            </div>
+          </div>
+
+          {apiError && (
             <div className={s.error}>
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
               </svg>
-              {error}
+              {apiError}
             </div>
           )}
 
           {/* Mobile-only pay button */}
-          <button type="submit" className={`${s.payBtn} ${s.payBtnMobile}`} disabled={loading}>
+          <button type="submit" className={`${s.payBtn} ${s.payBtnMobile}`} disabled={loading || outOfStock}>
             {loading ? <Spinner /> : null}
             {loading ? t('payBtnLoading') : price ? t('payBtnAmount', { amount: formatPrice(price) }) : t('payBtn')}
           </button>
@@ -226,20 +289,48 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
           <div className={s.summaryDivider} />
 
           <div className={s.summaryTotal}>
-            <span>{t('total')}</span>
-            <span className={s.summaryTotalAmount}>{price ? formatPrice(price) : '—'}</span>
+            <span className={s.summaryTotalLabel}>{t('total')}</span>
+            {price ? (
+              <span className={s.summaryTotalAmount}>
+                <span className={s.tWhole}>{Math.floor(price).toLocaleString('ru-RU')}</span>
+                <span className={s.tFrac}>,{String(Math.round((price % 1) * 100)).padStart(2, '0')}</span>
+                <span className={s.tCcy}>₽</span>
+              </span>
+            ) : (
+              <span className={s.tWhole}>—</span>
+            )}
           </div>
 
           <button
             type="submit"
             form="checkout"
             className={s.payBtn}
-            disabled={loading}
+            disabled={loading || outOfStock}
             onClick={handleSubmit as any}
           >
             {loading ? <Spinner /> : <SbpIcon size={16} />}
             {loading ? t('payBtnLoading') : t('payBtn')}
           </button>
+
+          {/* ETA card */}
+          <div className={s.etaCard}>
+            <div className={s.etaRow}>
+              <div className={s.etaIcon}>
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M13 2 4 14h7l-1 8 9-12h-7l1-8Z"/>
+                </svg>
+              </div>
+              <div>
+                <div className={s.etaTitle}>{t('eta.title')}</div>
+                <div className={s.etaSub}>{t('eta.sub')}</div>
+              </div>
+            </div>
+            <div className={s.etaBar}><span className={s.etaFill} /></div>
+            <div className={s.etaFoot}>
+              <span>{t('eta.start')}</span>
+              <span>{t('eta.end')}</span>
+            </div>
+          </div>
 
           <p className={s.summaryNote}>{t('disclaimer')}</p>
         </div>
@@ -249,17 +340,22 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
 }
 
 function Field({
-  label, hint, name, type, placeholder, value, onChange,
+  label, hint, name, type, placeholder, value, onChange, error, inputRef,
 }: {
   label: string; hint?: string; name: string; type?: string
   placeholder?: string; value: string; onChange: (v: string) => void
+  error?: string; inputRef?: (el: HTMLInputElement | null) => void
 }) {
   return (
-    <label className={s.field}>
-      <span className={s.fieldLabel}>{label}</span>
-      {hint && <span className={s.fieldHint}>{hint}</span>}
+    <div className={s.field}>
+      <label htmlFor={name}>
+        <span className={s.fieldLabel}>{label}</span>
+        {hint && <span className={s.fieldHint}>{hint}</span>}
+      </label>
       <input
-        className={s.input}
+        id={name}
+        ref={inputRef}
+        className={`${s.input} ${error ? s.inputError : ''}`}
         name={name}
         type={type ?? 'text'}
         placeholder={placeholder}
@@ -267,22 +363,35 @@ function Field({
         onChange={(e) => onChange(e.target.value)}
         autoComplete={type === 'email' ? 'email' : type === 'password' ? 'current-password' : 'off'}
       />
-    </label>
+      {error && (
+        <span className={s.fieldErrorMsg}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          {error}
+        </span>
+      )}
+    </div>
   )
 }
 
 function SelectField({
-  label, name, options, value, onChange, placeholder,
+  label, name, options, value, onChange, placeholder, error, selectRef,
 }: {
   label: string; name: string
   options: Array<{ name?: string; value: string | number; product?: string }>
   value: string; onChange: (v: string) => void; placeholder: string
+  error?: string; selectRef?: (el: HTMLSelectElement | null) => void
 }) {
   return (
-    <label className={s.field}>
-      <span className={s.fieldLabel}>{label}</span>
+    <div className={s.field}>
+      <label htmlFor={name}>
+        <span className={s.fieldLabel}>{label}</span>
+      </label>
       <select
-        className={`${s.input} ${s.select}`}
+        id={name}
+        ref={selectRef}
+        className={`${s.input} ${s.select} ${error ? s.inputError : ''}`}
         name={name}
         value={value}
         onChange={(e) => onChange(e.target.value)}
@@ -294,7 +403,15 @@ function SelectField({
           </option>
         ))}
       </select>
-    </label>
+      {error && (
+        <span className={s.fieldErrorMsg}>
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
+          </svg>
+          {error}
+        </span>
+      )}
+    </div>
   )
 }
 

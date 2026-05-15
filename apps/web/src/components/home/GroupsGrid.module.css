@@ -1,8 +1,87 @@
 .filters {
   display: flex;
   align-items: center;
-  gap: 6px;
+  justify-content: space-between;
+  gap: 12px;
   margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.filterLeft {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.filterRight {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.searchWrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.searchIcon {
+  position: absolute;
+  left: 10px;
+  color: var(--pay-fg-3);
+  pointer-events: none;
+  flex-shrink: 0;
+}
+
+.searchInput {
+  height: 30px;
+  padding: 0 28px 0 30px;
+  border-radius: var(--pay-radius-full);
+  background: var(--pay-surface-1);
+  border: 1px solid var(--pay-border-2);
+  color: var(--pay-fg-1);
+  font-family: var(--pay-font-sans);
+  font-size: 13px;
+  outline: none;
+  width: 200px;
+  transition: border-color var(--pay-duration-fast) var(--pay-ease),
+              box-shadow var(--pay-duration-fast) var(--pay-ease),
+              width var(--pay-duration-base) var(--pay-ease);
+}
+
+.searchInput::placeholder { color: var(--pay-fg-4); }
+
+.searchInput:focus {
+  border-color: var(--pay-brand);
+  box-shadow: 0 0 0 3px var(--pay-brand-ring);
+  width: 240px;
+}
+
+.searchClear {
+  position: absolute;
+  right: 8px;
+  background: none;
+  border: none;
+  padding: 2px;
+  color: var(--pay-fg-3);
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  border-radius: 50%;
+  transition: color var(--pay-duration-fast) var(--pay-ease);
+}
+
+.searchClear:hover { color: var(--pay-fg-1); }
+
+.empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding: 80px 0;
+  color: var(--pay-fg-3);
+  font-family: var(--pay-font-sans);
+  font-size: 14px;
 }
 
 .filterBtn {

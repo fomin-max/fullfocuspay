@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { Navbar } from '@/components/layout/Navbar'
 import { ProductList } from './ProductList'
+import { ScrollToTop } from '@/components/ScrollToTop'
 import Link from 'next/link'
 import s from './page.module.css'
 
@@ -50,6 +51,7 @@ export default async function GroupPage({ params }: { params: Promise<{ group: s
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--pay-bg-0)' }}>
+      <ScrollToTop />
       <Navbar />
       <main style={{ maxWidth: 1280, margin: '0 auto', padding: '32px 40px 80px' }}>
 

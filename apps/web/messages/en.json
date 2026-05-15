@@ -32,7 +32,9 @@
     "all": "All",
     "games": "Games",
     "business": "Business",
-    "count": "{count} services"
+    "count": "{count} services",
+    "searchPlaceholder": "Search service...",
+    "noResults": "Nothing found for «{query}»"
   },
   "products": {
     "types": {
@@ -43,9 +45,58 @@
     },
     "buy": "Buy",
     "empty": "No products available for this service.",
-    "outOfStock": "Out of stock — may still process"
+    "outOfStock": "Out of stock",
+    "outOfStockHint": "Out of stock — may still process",
+    "filters": {
+      "price": "Price",
+      "currency": "Currency",
+      "all": "All",
+      "lt500": "under 500 ₽",
+      "r500": "500–2000 ₽",
+      "r2000": "2000–5000 ₽",
+      "gt5000": "5000+ ₽",
+      "allCurrencies": "All currencies",
+      "country": "Country",
+      "allCountries": "All countries",
+      "results": "{count} items",
+      "inStockOnly": "In stock only"
+    }
   },
   "checkout": {
+    "steps": {
+      "service": "Service",
+      "payment": "Payment",
+      "confirm": "Confirm"
+    },
+    "tags": {
+      "instant": "Instant delivery",
+      "secure": "СБП · no fees"
+    },
+    "aside": {
+      "status": "Status",
+      "inStock": "In stock",
+      "outOfStock": "Out of stock",
+      "payment": "Payment",
+      "paymentValue": "СБП"
+    },
+    "payMethod": {
+      "title": "Payment method",
+      "sbpName": "СБП",
+      "sbpSub": "Instant transfer · no fees",
+      "sbpFlag": "recommended",
+      "cardName": "Card · Visa / Mastercard",
+      "cardSub": "3-D Secure · processed by acquiring bank",
+      "cardFlag": "soon",
+      "usdtName": "USDT · TRC-20",
+      "usdtSub": "TRON network · 1 confirmation",
+      "usdtFlag": "soon"
+    },
+    "eta": {
+      "title": "Delivery in ~42 seconds",
+      "sub": "After СБП payment confirmation",
+      "start": "СБП payment",
+      "end": "received"
+    },
     "yourDetails": "Your details",
     "email": "Email",
     "emailHint": "We'll send the key to this address if needed",
