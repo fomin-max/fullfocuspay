@@ -1,0 +1,88 @@
+{
+  "nav": {
+    "dashboard": "Dashboard",
+    "topup": "Top up",
+    "services": "Services",
+    "orders": "Orders",
+    "help": "Help",
+    "search": "Search services, orders…",
+    "account": "Account",
+    "myOrders": "My orders",
+    "helpSupport": "Help & support",
+    "signOut": "Sign out"
+  },
+  "home": {
+    "live": "All systems live",
+    "headline": "Pay direct.\nPlay sooner.",
+    "subline": "{count}+ services available. Pay with СБП — delivery in under 60 seconds.",
+    "browse": "Browse services",
+    "howItWorks": "How it works",
+    "allServices": "All services",
+    "stats": {
+      "services": "services",
+      "delivery": "avg. delivery",
+      "successRate": "success rate"
+    }
+  },
+  "services": {
+    "title": "All services",
+    "subtitle": "{count}+ services available — pay with СБП"
+  },
+  "groups": {
+    "all": "All",
+    "games": "Games",
+    "business": "Business",
+    "count": "{count} services"
+  },
+  "products": {
+    "types": {
+      "VOUCHER": "Gift card / Key",
+      "TOPUP": "Top-up",
+      "ESIM": "eSIM",
+      "STEAM": "Steam"
+    },
+    "buy": "Buy",
+    "empty": "No products available for this service.",
+    "outOfStock": "Out of stock — may still process"
+  },
+  "checkout": {
+    "yourDetails": "Your details",
+    "email": "Email",
+    "emailHint": "We'll send the key to this address if needed",
+    "selectPlaceholder": "Select…",
+    "orderSummary": "Order summary",
+    "payment": "Payment",
+    "total": "Total",
+    "payBtn": "Pay with СБП",
+    "payBtnAmount": "Pay {amount} with СБП",
+    "payBtnLoading": "Processing…",
+    "disclaimer": "You will be redirected to your bank app to confirm the payment. Delivery in under 60 seconds.",
+    "errors": {
+      "emailRequired": "Please enter a valid email address",
+      "fieldRequired": "Please fill in: {field}",
+      "generic": "Something went wrong. Please try again."
+    }
+  },
+  "order": {
+    "waitingTitle": "Waiting for payment",
+    "waitingHint": "Open your banking app and confirm the СБП payment. This page updates automatically.",
+    "waitingStatus": "Waiting for bank confirmation…",
+    "openPayment": "Open payment link",
+    "successTitle": "Payment successful",
+    "yourCode": "Your code",
+    "copy": "Copy",
+    "copied": "Copied!",
+    "redeemCode": "Redeem code",
+    "expiredTitle": "Payment expired",
+    "expiredSub": "The payment time ran out. No charge was made.",
+    "failedTitle": "Payment failed",
+    "failedSub": "Something went wrong. No charge was made.",
+    "browseServices": "Browse services",
+    "tryAgain": "Try again",
+    "errorTitle": "Something went wrong"
+  },
+  "lang": {
+    "ru": "RU",
+    "en": "EN"
+  }
+}

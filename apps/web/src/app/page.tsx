@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import { Navbar } from '@/components/layout/Navbar'
 import { GroupsGrid } from '@/components/home/GroupsGrid'
 
@@ -16,6 +17,7 @@ async function getGroups() {
 
 export default async function HomePage() {
   const groups = await getGroups()
+  const t = await getTranslations('home')
 
   return (
     <div style={{
@@ -80,7 +82,7 @@ export default async function HomePage() {
                   animation: 'pulse-dot 1.8s ease infinite',
                   display: 'inline-block',
                 }} />
-                All systems live
+                {t('live')}
               </div>
 
               <h1 style={{
@@ -90,14 +92,16 @@ export default async function HomePage() {
                 letterSpacing: '-0.02em', fontWeight: 700,
                 color: 'var(--pay-fg-1)',
               }}>
-                Pay direct.<br />Play sooner.
+                {t('headline').split('\n').map((line, i, arr) => (
+                  <span key={i}>{line}{i < arr.length - 1 && <br />}</span>
+                ))}
               </h1>
               <p style={{
                 margin: '16px 0 0',
                 color: 'var(--pay-fg-2)', fontSize: 16, lineHeight: 1.5,
                 maxWidth: 420,
               }}>
-                Top up {groups.length > 0 ? groups.length : '100'}+ services directly. Pay with СБП — delivery in under 60 seconds.
+                {t('subline', { count: groups.length > 0 ? groups.length : 100 })}
               </p>
 
               <div style={{ display: 'flex', gap: 12, marginTop: 28 }}>
@@ -112,7 +116,7 @@ export default async function HomePage() {
                   display: 'inline-flex', alignItems: 'center', gap: 8,
                   boxShadow: '0 0 0 1px var(--pay-brand-press) inset, 0 6px 20px rgba(102,50,250,0.35)',
                 }}>
-                  Browse services
+                  {t('browse')}
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
@@ -128,7 +132,7 @@ export default async function HomePage() {
                   textDecoration: 'none',
                   display: 'inline-flex', alignItems: 'center',
                 }}>
-                  How it works
+                  {t('howItWorks')}
                 </a>
               </div>
             </div>
@@ -136,9 +140,9 @@ export default async function HomePage() {
             {/* Stats */}
             <div style={{ display: 'flex', flexDirection: 'column', gap: 16, minWidth: 200 }}>
               {[
-                { value: groups.length > 0 ? `${groups.length}+` : '100+', label: 'services' },
-                { value: '42 sec', label: 'avg. delivery' },
-                { value: '98.4%', label: 'success rate' },
+                { value: groups.length > 0 ? `${groups.length}+` : '100+', label: t('stats.services') },
+                { value: '42 sec', label: t('stats.delivery') },
+                { value: '98.4%', label: t('stats.successRate') },
               ].map(({ value, label }) => (
                 <div key={label} style={{
                   background: 'rgba(242,242,247,0.04)',
@@ -166,7 +170,7 @@ export default async function HomePage() {
         {/* Groups grid */}
         <section id="popular">
           <h2 style={{ margin: '0 0 20px', fontSize: 20, fontWeight: 700, color: 'var(--pay-fg-1)' }}>
-            All services
+            {t('allServices')}
           </h2>
           <GroupsGrid groups={groups} />
         </section>

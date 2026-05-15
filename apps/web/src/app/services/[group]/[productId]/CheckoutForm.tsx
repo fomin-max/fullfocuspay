@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 import s from './CheckoutForm.module.css'
 
 interface FormField {
@@ -35,6 +36,8 @@ function formatPrice(p: number) {
 
 export function CheckoutForm({ product, topupFields, group }: Props) {
   const router = useRouter()
+  const t = useTranslations('checkout')
+  const tp = useTranslations('products')
   const isVoucher = product.type === 'VOUCHER'
   const price = product.price ?? product.retail_price ?? 0
 
@@ -55,13 +58,13 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
     if (isVoucher) {
       const email = values.email?.trim()
       if (!email || !email.includes('@')) {
-        setError('Please enter a valid email address')
+        setError(t('errors.emailRequired'))
         return
       }
     } else {
       for (const field of topupFields) {
         if (field.type === 'text' && !values[field.name]?.trim()) {
-          setError(`Please fill in: ${field.label}`)
+          setError(t('errors.fieldRequired', { field: field.label }))
           return
         }
       }
@@ -114,7 +117,7 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
       // Redirect to SBP payment
       window.location.href = payUrl
     } catch (e: any) {
-      setError(e.message || 'Something went wrong. Please try again.')
+      setError(e.message || t('errors.generic'))
       setLoading(false)
     }
   }
@@ -136,19 +139,19 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
                 <circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>
               </svg>
-              Out of stock — may still process
+              {tp('outOfStock')}
             </div>
           )}
         </div>
 
         <form onSubmit={handleSubmit} className={s.form}>
           <div className={s.section}>
-            <div className={s.sectionTitle}>Your details</div>
+            <div className={s.sectionTitle}>{t('yourDetails')}</div>
 
             {isVoucher ? (
               <Field
-                label="Email"
-                hint="We'll send the key to this address if needed"
+                label={t('email')}
+                hint={t('emailHint')}
                 name="email"
                 type="email"
                 placeholder="you@example.com"
@@ -165,6 +168,7 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
                     options={field.options ?? []}
                     value={values[field.name] ?? ''}
                     onChange={(v) => set(field.name, v)}
+                    placeholder={t('selectPlaceholder')}
                   />
                 ) : (
                   <Field
@@ -177,6 +181,7 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
                     onChange={(v) => set(field.name, v)}
                   />
                 )
+
               ))
             )}
           </div>
@@ -193,7 +198,7 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
           {/* Mobile-only pay button */}
           <button type="submit" className={`${s.payBtn} ${s.payBtnMobile}`} disabled={loading}>
             {loading ? <Spinner /> : null}
-            {loading ? 'Processing…' : `Pay ${price ? formatPrice(price) : ''} with СБП`}
+            {loading ? t('payBtnLoading') : price ? t('payBtnAmount', { amount: formatPrice(price) }) : t('payBtn')}
           </button>
         </form>
       </div>
@@ -201,7 +206,7 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
       {/* Right: order summary */}
       <div className={s.summarySide}>
         <div className={s.summary}>
-          <div className={s.summaryTitle}>Order summary</div>
+          <div className={s.summaryTitle}>{t('orderSummary')}</div>
 
           <div className={s.summaryRow}>
             <span className={s.summaryLabel}>{product.name}</span>
@@ -211,7 +216,7 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
           <div className={s.summaryDivider} />
 
           <div className={s.summaryRow}>
-            <span className={s.summaryLabel}>Payment</span>
+            <span className={s.summaryLabel}>{t('payment')}</span>
             <span className={s.summaryPayMethod}>
               <SbpIcon />
               СБП
@@ -221,7 +226,7 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
           <div className={s.summaryDivider} />
 
           <div className={s.summaryTotal}>
-            <span>Total</span>
+            <span>{t('total')}</span>
             <span className={s.summaryTotalAmount}>{price ? formatPrice(price) : '—'}</span>
           </div>
 
@@ -233,12 +238,10 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
             onClick={handleSubmit as any}
           >
             {loading ? <Spinner /> : <SbpIcon size={16} />}
-            {loading ? 'Processing…' : 'Pay with СБП'}
+            {loading ? t('payBtnLoading') : t('payBtn')}
           </button>
 
-          <p className={s.summaryNote}>
-            You will be redirected to your bank app to confirm the payment. Delivery in under 60 seconds.
-          </p>
+          <p className={s.summaryNote}>{t('disclaimer')}</p>
         </div>
       </div>
     </div>
@@ -269,11 +272,11 @@ function Field({
 }
 
 function SelectField({
-  label, name, options, value, onChange,
+  label, name, options, value, onChange, placeholder,
 }: {
   label: string; name: string
   options: Array<{ name?: string; value: string | number; product?: string }>
-  value: string; onChange: (v: string) => void
+  value: string; onChange: (v: string) => void; placeholder: string
 }) {
   return (
     <label className={s.field}>
@@ -284,7 +287,7 @@ function SelectField({
         value={value}
         onChange={(e) => onChange(e.target.value)}
       >
-        <option value="">Select…</option>
+        <option value="">{placeholder}</option>
         {options.map((o) => (
           <option key={String(o.value)} value={String(o.value)}>
             {o.name ?? o.product ?? String(o.value)}

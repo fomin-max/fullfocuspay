@@ -1,3 +1,4 @@
+import { getTranslations } from 'next-intl/server'
 import { Navbar } from '@/components/layout/Navbar'
 import { GroupsGrid } from '@/components/home/GroupsGrid'
 
@@ -18,16 +19,17 @@ export const metadata = { title: 'Services — Full Focus Pay' }
 
 export default async function ServicesPage() {
   const groups = await getGroups()
+  const t = await getTranslations('services')
 
   return (
     <div style={{ minHeight: '100vh', background: 'var(--pay-bg-0)' }}>
       <Navbar />
       <main style={{ maxWidth: 1280, margin: '0 auto', padding: '40px 40px 80px' }}>
         <h1 style={{ margin: '0 0 8px', fontSize: 28, fontWeight: 700, color: 'var(--pay-fg-1)' }}>
-          All services
+          {t('title')}
         </h1>
         <p style={{ margin: '0 0 32px', fontSize: 15, color: 'var(--pay-fg-3)' }}>
-          {groups.length}+ services available — pay with СБП
+          {t('subtitle', { count: groups.length })}
         </p>
         <GroupsGrid groups={groups} />
       </main>

@@ -2,6 +2,7 @@
 import Link from 'next/link'
 import Image from 'next/image'
 import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import s from './GroupsGrid.module.css'
 
 interface Group {
@@ -28,14 +29,21 @@ const SERVICE_ICONS: Record<string, string> = {
 const CATEGORIES = ['All', 'games', 'business']
 
 export function GroupsGrid({ groups }: { groups: Group[] }) {
+  const t = useTranslations('groups')
   const [activeCategory, setActiveCategory] = useState('All')
 
-  // Deduplicate by group name
   const unique = groups.filter((g, i, arr) => arr.findIndex(x => x.group === g.group) === i)
 
   const filtered = activeCategory === 'All'
     ? unique
     : unique.filter((g) => g.category === activeCategory)
+
+  const catLabel = (cat: string) => {
+    if (cat === 'All') return t('all')
+    if (cat === 'games') return t('games')
+    if (cat === 'business') return t('business')
+    return cat
+  }
 
   return (
     <>
@@ -46,10 +54,10 @@ export function GroupsGrid({ groups }: { groups: Group[] }) {
             onClick={() => setActiveCategory(cat)}
             className={`${s.filterBtn} ${activeCategory === cat ? s.filterBtnActive : ''}`}
           >
-            {cat === 'All' ? 'All' : cat.charAt(0).toUpperCase() + cat.slice(1)}
+            {catLabel(cat)}
           </button>
         ))}
-        <span className={s.count}>{filtered.length} services</span>
+        <span className={s.count}>{t('count', { count: filtered.length })}</span>
       </div>
 
       <div className={s.grid}>

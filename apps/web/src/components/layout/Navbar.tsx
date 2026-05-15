@@ -2,15 +2,9 @@
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
+import { useTranslations, useLocale } from 'next-intl'
+import { LocaleSwitcher } from './LocaleSwitcher'
 import s from './Navbar.module.css'
-
-const NAV_LINKS = [
-  { href: '/', label: 'Dashboard' },
-  { href: '/top-up', label: 'Top up' },
-  { href: '/services', label: 'Services' },
-  { href: '/orders', label: 'Orders' },
-  { href: '/help', label: 'Help' },
-]
 
 function LogoWordmark() {
   return (
@@ -37,9 +31,19 @@ function LogoWordmark() {
 }
 
 export function Navbar() {
+  const t = useTranslations('nav')
+  const locale = useLocale()
   const pathname = usePathname()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
+
+  const NAV_LINKS = [
+    { href: '/', label: t('dashboard') },
+    { href: '/top-up', label: t('topup') },
+    { href: '/services', label: t('services') },
+    { href: '/orders', label: t('orders') },
+    { href: '/help', label: t('help') },
+  ]
 
   useEffect(() => {
     function handleClick(e: MouseEvent) {
@@ -77,6 +81,7 @@ export function Navbar() {
       <div className={s.spacer} />
 
       {/* Search */}
+
       <div className={s.searchWrap}>
         <span className={s.searchIcon}>
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -85,7 +90,7 @@ export function Navbar() {
         </span>
         <input
           className={s.searchInput}
-          placeholder="Search services, orders…"
+          placeholder={t('search')}
           onKeyDown={(e) => {
             if (e.key === 'Enter') {
               const q = (e.target as HTMLInputElement).value.trim()
@@ -95,10 +100,12 @@ export function Navbar() {
         />
       </div>
 
+      <LocaleSwitcher locale={locale} />
+
       {/* Account */}
       <div className={s.accountBtn} ref={dropdownRef} onClick={() => setDropdownOpen((v) => !v)}>
         <div className={s.accountAvatar}>U</div>
-        <span className={s.accountName}>Account</span>
+        <span className={s.accountName}>{t('account')}</span>
         <span className={`${s.chevron} ${dropdownOpen ? s.chevronOpen : ''}`}>
           <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
             <path d="m6 9 6 6 6-6"/>
@@ -109,16 +116,16 @@ export function Navbar() {
           <div className={s.dropdown} onClick={(e) => e.stopPropagation()}>
             <Link href="/orders" className={s.dropdownItem} onClick={() => setDropdownOpen(false)}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/></svg>
-              My orders
+              {t('myOrders')}
             </Link>
             <Link href="/help" className={s.dropdownItem} onClick={() => setDropdownOpen(false)}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              Help & support
+              {t('helpSupport')}
             </Link>
             <div className={s.dropdownDivider} />
             <div className={`${s.dropdownItem} ${s.dropdownDanger}`}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-              Sign out
+              {t('signOut')}
             </div>
           </div>
         )}

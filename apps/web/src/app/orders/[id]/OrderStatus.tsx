@@ -1,5 +1,6 @@
 'use client'
 import { useEffect, useState, useCallback } from 'react'
+import { useTranslations } from 'next-intl'
 import s from './OrderStatus.module.css'
 
 interface Order {
@@ -18,6 +19,7 @@ const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
 const TERMINAL = ['completed', 'failed', 'refunded', 'expired']
 
 export function OrderStatus({ orderId }: { orderId: string }) {
+  const t = useTranslations('order')
   const [order, setOrder] = useState<Order | null>(null)
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
@@ -65,7 +67,7 @@ export function OrderStatus({ orderId }: { orderId: string }) {
             <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
           </svg>
         </div>
-        <h2 className={s.title}>Something went wrong</h2>
+        <h2 className={s.title}>{t('errorTitle')}</h2>
         <p className={s.sub}>{error}</p>
       </div>
     )
@@ -93,24 +95,24 @@ export function OrderStatus({ orderId }: { orderId: string }) {
             <rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>
           </svg>
         </div>
-        <h2 className={s.title}>Waiting for payment</h2>
+        <h2 className={s.title}>{t('waitingTitle')}</h2>
         <p className={s.sub}>
           {productName && <strong>{productName}</strong>}
           {userAmount ? ` · ${userAmount.toLocaleString('ru-RU')} ₽` : ''}
         </p>
-        <p className={s.hint}>Open your banking app and confirm the СБП payment. This page updates automatically.</p>
+        <p className={s.hint}>{t('waitingHint')}</p>
 
         {payUrl && (
           <a href={payUrl} className={s.payBtn}>
             <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
               <rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>
             </svg>
-            Open payment link
+            {t('openPayment')}
           </a>
         )}
         <div className={s.statusRow}>
           <span className={s.dot} />
-          <span className={s.statusText}>Waiting for bank confirmation…</span>
+          <span className={s.statusText}>{t('waitingStatus')}</span>
         </div>
       </div>
     )
@@ -125,12 +127,12 @@ export function OrderStatus({ orderId }: { orderId: string }) {
             <polyline points="20 6 9 17 4 12"/>
           </svg>
         </div>
-        <h2 className={s.title}>Payment successful</h2>
+        <h2 className={s.title}>{t('successTitle')}</h2>
         <p className={s.sub}>{productName}</p>
 
         {resultKey && (
           <div className={s.keyBox}>
-            <div className={s.keyLabel}>Your code</div>
+            <div className={s.keyLabel}>{t('yourCode')}</div>
             <div className={s.keyRow}>
               <code className={s.keyCode}>{resultKey}</code>
               <button className={s.copyBtn} onClick={copyKey}>
@@ -143,7 +145,7 @@ export function OrderStatus({ orderId }: { orderId: string }) {
                     <rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/>
                   </svg>
                 )}
-                {copied ? 'Copied!' : 'Copy'}
+                {copied ? t('copied') : t('copy')}
               </button>
             </div>
           </div>
@@ -151,7 +153,7 @@ export function OrderStatus({ orderId }: { orderId: string }) {
 
         {resultUrl && (
           <a href={resultUrl} target="_blank" rel="noopener noreferrer" className={s.payBtn}>
-            Redeem code
+            {t('redeemCode')}
             <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
               <path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/>
             </svg>
@@ -170,9 +172,9 @@ export function OrderStatus({ orderId }: { orderId: string }) {
             <circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/>
           </svg>
         </div>
-        <h2 className={s.title}>Payment expired</h2>
-        <p className={s.sub}>The payment time ran out. No charge was made.</p>
-        <a href="/services" className={s.payBtn}>Browse services</a>
+        <h2 className={s.title}>{t('expiredTitle')}</h2>
+        <p className={s.sub}>{t('expiredSub')}</p>
+        <a href="/services" className={s.payBtn}>{t('browseServices')}</a>
       </div>
     )
   }
@@ -185,9 +187,9 @@ export function OrderStatus({ orderId }: { orderId: string }) {
           <circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/>
         </svg>
       </div>
-      <h2 className={s.title}>Payment failed</h2>
-      <p className={s.sub}>Something went wrong. No charge was made.</p>
-      <a href="/services" className={s.payBtn}>Try again</a>
+      <h2 className={s.title}>{t('failedTitle')}</h2>
+      <p className={s.sub}>{t('failedSub')}</p>
+      <a href="/services" className={s.payBtn}>{t('tryAgain')}</a>
     </div>
   )
 }

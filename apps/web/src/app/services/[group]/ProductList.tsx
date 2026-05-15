@@ -1,6 +1,7 @@
 'use client'
 import { useState } from 'react'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 import s from './ProductList.module.css'
 
 interface Product {
@@ -36,14 +37,8 @@ function formatPrice(price: number, currency = 'RUB'): string {
   return `${price} ${currency}`
 }
 
-const TYPE_LABELS: Record<string, string> = {
-  VOUCHER: 'Gift card / Key',
-  TOPUP: 'Top-up',
-  ESIM: 'eSIM',
-  STEAM: 'Steam',
-}
-
 export function ProductList({ products, group }: { products: Product[]; group: string }) {
+  const t = useTranslations('products')
   const types = [...new Set(products.map((p) => p.type).filter(Boolean))] as string[]
   const [activeType, setActiveType] = useState(types[0] ?? 'ALL')
 
@@ -54,7 +49,7 @@ export function ProductList({ products, group }: { products: Product[]; group: s
   if (products.length === 0) {
     return (
       <div className={s.empty}>
-        <p>No products available for this service.</p>
+        <p>{t('empty')}</p>
       </div>
     )
   }
@@ -63,15 +58,15 @@ export function ProductList({ products, group }: { products: Product[]; group: s
     <>
       {types.length > 1 && (
         <div className={s.tabs}>
-          {types.map((t) => (
+          {types.map((type) => (
             <button
-              key={t}
-              className={`${s.tab} ${activeType === t ? s.tabActive : ''}`}
-              onClick={() => setActiveType(t)}
+              key={type}
+              className={`${s.tab} ${activeType === type ? s.tabActive : ''}`}
+              onClick={() => setActiveType(type)}
             >
-              {TYPE_LABELS[t] ?? t}
+              {t(`types.${type}` as any)}
               <span className={s.tabCount}>
-                {products.filter((p) => p.type === t).length}
+                {products.filter((p) => p.type === type).length}
               </span>
             </button>
           ))}
@@ -93,14 +88,14 @@ export function ProductList({ products, group }: { products: Product[]; group: s
             <Link key={id || name} href={href} className={s.card}>
               <div className={s.cardGlow} />
               <div className={s.cardTop}>
-                <span className={s.typeBadge}>{TYPE_LABELS[type] ?? type}</span>
+                <span className={s.typeBadge}>{t(`types.${type}` as any)}</span>
               </div>
               <div className={s.cardName}>{name}</div>
               {price !== null && (
                 <div className={s.cardPrice}>{formatPrice(price, currency)}</div>
               )}
               <div className={s.cardBuy}>
-                Buy
+                {t('buy')}
                 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                   <path d="M5 12h14M12 5l7 7-7 7"/>
                 </svg>
