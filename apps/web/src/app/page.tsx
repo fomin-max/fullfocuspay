@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { Navbar } from '@/components/layout/Navbar'
+import { NavbarServer as Navbar } from '@/components/layout/NavbarServer'
 import { GroupsGrid } from '@/components/home/GroupsGrid'
 
 async function getGroups() {
@@ -105,7 +105,7 @@ export default async function HomePage() {
               </p>
 
               <div style={{ display: 'flex', gap: 12, marginTop: 28 }}>
-                <a href="/services" style={{
+                <a href="/top-up" style={{
                   height: 44, padding: '0 20px',
                   borderRadius: 'var(--pay-radius-sm)',
                   background: 'var(--pay-brand)',
@@ -116,12 +116,12 @@ export default async function HomePage() {
                   display: 'inline-flex', alignItems: 'center', gap: 8,
                   boxShadow: '0 0 0 1px var(--pay-brand-press) inset, 0 6px 20px rgba(102,50,250,0.35)',
                 }}>
-                  {t('browse')}
+                  {t('topupSteam')}
                   <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
                     <path d="M5 12h14M12 5l7 7-7 7"/>
                   </svg>
                 </a>
-                <a href="#popular" style={{
+                <a href="/services" style={{
                   height: 44, padding: '0 20px',
                   borderRadius: 'var(--pay-radius-sm)',
                   background: 'rgba(242,242,247,0.04)',
@@ -132,7 +132,7 @@ export default async function HomePage() {
                   textDecoration: 'none',
                   display: 'inline-flex', alignItems: 'center',
                 }}>
-                  {t('howItWorks')}
+                  {t('browse')}
                 </a>
               </div>
             </div>

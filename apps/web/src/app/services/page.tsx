@@ -1,5 +1,5 @@
 import { getTranslations } from 'next-intl/server'
-import { Navbar } from '@/components/layout/Navbar'
+import { NavbarServer as Navbar } from '@/components/layout/NavbarServer'
 import { GroupsGrid } from '@/components/home/GroupsGrid'
 
 async function getGroups() {

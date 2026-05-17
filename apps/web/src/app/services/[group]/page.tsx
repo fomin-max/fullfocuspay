@@ -1,5 +1,5 @@
 import { notFound } from 'next/navigation'
-import { Navbar } from '@/components/layout/Navbar'
+import { NavbarServer as Navbar } from '@/components/layout/NavbarServer'
 import { ProductList } from './ProductList'
 import { ScrollToTop } from '@/components/ScrollToTop'
 import Link from 'next/link'

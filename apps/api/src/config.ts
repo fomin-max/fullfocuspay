@@ -11,8 +11,15 @@ export const config = {
   foreignPay: {
     baseUrl: process.env.FOREIGNPAY_URL || 'https://keys.foreignpay.ru',
     token: process.env.FOREIGNPAY_TOKEN || '',
+    steamUrl: process.env.FOREIGNPAY_STEAM_URL || 'https://foreign.foreignpay.ru',
+    steamSbpToken: process.env.FOREIGNPAY_STEAM_SBP_TOKEN || '',
+    steamCardToken: process.env.FOREIGNPAY_STEAM_CARD_TOKEN || '',
+    foreignPercentSbp: Number(process.env.FOREIGN_PERCENT_SBP) || 5.5,
+    foreignPercentCard: Number(process.env.FOREIGN_PERCENT_CARD) || 7,
   },
   payment: {
     ourPercent: Number(process.env.OUR_PERCENT) || 5,
   },
+  resendApiKey: process.env.RESEND_API_KEY || '',
+  resendFrom: process.env.RESEND_FROM || 'Full Focus Pay <noreply@fullfocuspay.ru>',
 }

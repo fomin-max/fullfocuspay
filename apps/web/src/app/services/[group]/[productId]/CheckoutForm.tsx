@@ -92,6 +92,7 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
         res = await fetch(`${API_URL}/api/orders/voucher`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify({
             productId: String(product.product_id),
             productName: product.name,
@@ -107,6 +108,7 @@ export function CheckoutForm({ product, topupFields, group }: Props) {
         res = await fetch(`${API_URL}/api/orders/topup`, {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
           body: JSON.stringify({
             productId: String(product.product_id),
             productName: product.name,

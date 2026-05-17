@@ -1,4 +1,4 @@
-import { Navbar } from '@/components/layout/Navbar'
+import { NavbarServer as Navbar } from '@/components/layout/NavbarServer'
 import { OrderStatus } from './OrderStatus'
 
 export const metadata = { title: 'Order — Full Focus Pay' }

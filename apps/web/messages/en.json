@@ -7,6 +7,7 @@
     "help": "Help",
     "search": "Search services, orders…",
     "account": "Account",
+    "signIn": "Sign in",
     "myOrders": "My orders",
     "helpSupport": "Help & support",
     "signOut": "Sign out"
@@ -14,9 +15,9 @@
   "home": {
     "live": "All systems live",
     "headline": "Pay direct.\nPlay sooner.",
-    "subline": "{count}+ services available. Pay with СБП — delivery in under 60 seconds.",
+    "subline": "{count}+ services. Pay with FPS or card — delivery in under 60 seconds.",
+    "topupSteam": "Top up Steam",
     "browse": "Browse services",
-    "howItWorks": "How it works",
     "allServices": "All services",
     "stats": {
       "services": "services",
@@ -26,7 +27,7 @@
   },
   "services": {
     "title": "All services",
-    "subtitle": "{count}+ services available — pay with СБП"
+    "subtitle": "{count}+ services available — pay with FPS or card"
   },
   "groups": {
     "all": "All",
@@ -70,18 +71,18 @@
     },
     "tags": {
       "instant": "Instant delivery",
-      "secure": "СБП · no fees"
+      "secure": "FPS · no fees"
     },
     "aside": {
       "status": "Status",
       "inStock": "In stock",
       "outOfStock": "Out of stock",
       "payment": "Payment",
-      "paymentValue": "СБП"
+      "paymentValue": "FPS / Card"
     },
     "payMethod": {
       "title": "Payment method",
-      "sbpName": "СБП",
+      "sbpName": "FPS (Faster Payments System)",
       "sbpSub": "Instant transfer · no fees",
       "sbpFlag": "recommended",
       "cardName": "Card · Visa / Mastercard",
@@ -93,8 +94,8 @@
     },
     "eta": {
       "title": "Delivery in ~42 seconds",
-      "sub": "After СБП payment confirmation",
-      "start": "СБП payment",
+      "sub": "After FPS payment confirmation",
+      "start": "FPS payment",
       "end": "received"
     },
     "yourDetails": "Your details",
@@ -104,8 +105,8 @@
     "orderSummary": "Order summary",
     "payment": "Payment",
     "total": "Total",
-    "payBtn": "Pay with СБП",
-    "payBtnAmount": "Pay {amount} with СБП",
+    "payBtn": "Pay with FPS",
+    "payBtnAmount": "Pay {amount} with FPS",
     "payBtnLoading": "Processing…",
     "disclaimer": "You will be redirected to your bank app to confirm the payment. Delivery in under 60 seconds.",
     "errors": {
@@ -114,9 +115,32 @@
       "generic": "Something went wrong. Please try again."
     }
   },
+  "orders": {
+    "title": "My orders",
+    "titleGuest": "Find orders",
+    "empty": "No orders yet",
+    "emptyHint": "Your purchases will appear here",
+    "emptyGuest": "Nothing found",
+    "emptyGuestHint": "Check the email address or try a different one",
+    "lookupLabel": "Email you used when purchasing",
+    "lookupPlaceholder": "you@example.com",
+    "lookupBtn": "Find orders",
+    "lookupLoading": "Searching…",
+    "loginPrompt": "Sign in to see all your orders",
+    "signIn": "Sign in",
+    "statusPending": "Created",
+    "statusAwaiting": "Awaiting payment",
+    "statusPaid": "Paid",
+    "statusProcessing": "Processing",
+    "statusCompleted": "Completed",
+    "statusFailed": "Failed",
+    "statusRefunded": "Refunded",
+    "statusExpired": "Expired",
+    "viewOrder": "View"
+  },
   "order": {
     "waitingTitle": "Waiting for payment",
-    "waitingHint": "Open your banking app and confirm the СБП payment. This page updates automatically.",
+    "waitingHint": "Open your banking app and confirm the FPS payment. This page updates automatically.",
     "waitingStatus": "Waiting for bank confirmation…",
     "openPayment": "Open payment link",
     "successTitle": "Payment successful",
@@ -131,6 +155,55 @@
     "browseServices": "Browse services",
     "tryAgain": "Try again",
     "errorTitle": "Something went wrong"
+  },
+  "topup": {
+    "title": "Steam Wallet",
+    "subtitle": "Instant top-up via FPS or card",
+    "loginLabel": "Steam login",
+    "loginPlaceholder": "Enter your Steam login",
+    "loginChecking": "Checking account…",
+    "loginFound": "Account found",
+    "loginNotFound": "Account not found",
+    "amountLabel": "Top-up amount",
+    "customAmount": "Custom amount (100 – 50 000 ₽)",
+    "minAmount": "Minimum amount is 100 ₽",
+    "cost": "Cost",
+    "rate": "Rate",
+    "rateLoading": "Calculating rate…",
+    "payMethodLabel": "Payment method",
+    "sbpName": "FPS (Faster Payments System)",
+    "sbpSub": "Instant transfer · minimum fee",
+    "cardName": "Card · Visa / Mastercard",
+    "cardSub": "Slightly higher fee · 3-D Secure",
+    "payBtn": "Pay",
+    "payBtnAmount": "Pay {amount} via FPS",
+    "payBtnCard": "Pay",
+    "payBtnAmountCard": "Pay {amount} by card",
+    "payBtnLoading": "Processing…",
+    "disclaimerSbp": "You will be redirected to your bank app. Top-up arrives instantly after confirmation.",
+    "disclaimerCard": "You will be redirected to a secure card payment page. Top-up arrives within a minute.",
+    "errorGeneric": "Something went wrong. Please try again.",
+    "errorNetwork": "Connection error. Check your internet and try again.",
+    "trust1": "Instant",
+    "trust2": "No fees",
+    "trust3": "Secure"
+  },
+  "login": {
+    "title": "Sign in",
+    "subtitle": "No password — just enter your email",
+    "emailLabel": "Email",
+    "emailPlaceholder": "you@example.com",
+    "sendCode": "Send code",
+    "sending": "Sending…",
+    "noPasswordHint": "We'll send a one-time code. No password needed.",
+    "codeLabel": "Code from email",
+    "codeSentTo": "Code sent to",
+    "confirm": "Sign in",
+    "verifying": "Verifying…",
+    "changeEmail": "Change email",
+    "errorSend": "Failed to send code. Please check your email.",
+    "errorCode": "Invalid or expired code. Please try again.",
+    "errorGeneric": "Something went wrong. Please try again."
   },
   "lang": {
     "ru": "RU",

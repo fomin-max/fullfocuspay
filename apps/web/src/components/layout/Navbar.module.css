@@ -183,6 +183,7 @@
   gap: 10px;
   height: 36px;
   padding: 0 10px;
+  width: 100%;
   border-radius: var(--pay-radius-sm);
   color: var(--pay-fg-2);
   font-size: 13.5px;
@@ -190,6 +191,8 @@
   font-family: var(--pay-font-sans);
   cursor: pointer;
   text-decoration: none;
+  background: none;
+  border: none;
   transition: background var(--pay-duration-fast) var(--pay-ease),
               color var(--pay-duration-fast) var(--pay-ease);
   white-space: nowrap;
@@ -213,4 +216,26 @@
 .dropdownDanger:hover {
   background: var(--pay-danger-subtle);
   color: var(--pay-danger);
+}
+
+.loginBtn {
+  height: 36px;
+  padding: 0 16px;
+  display: flex;
+  align-items: center;
+  border-radius: var(--pay-radius-sm);
+  background: var(--pay-brand);
+  border: 1px solid var(--pay-brand-press);
+  color: var(--pay-fg-1);
+  font-size: 14px;
+  font-weight: 600;
+  font-family: var(--pay-font-sans);
+  text-decoration: none;
+  cursor: pointer;
+  transition: opacity var(--pay-duration-fast) var(--pay-ease);
+  white-space: nowrap;
+}
+
+.loginBtn:hover {
+  opacity: 0.85;
 }

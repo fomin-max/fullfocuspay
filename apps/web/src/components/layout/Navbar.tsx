@@ -1,10 +1,14 @@
 'use client'
 import Link from 'next/link'
-import { usePathname } from 'next/navigation'
+import { usePathname, useRouter } from 'next/navigation'
 import { useState, useRef, useEffect } from 'react'
 import { useTranslations, useLocale } from 'next-intl'
 import { LocaleSwitcher } from './LocaleSwitcher'
 import s from './Navbar.module.css'
+
+const API = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:3001'
+
+type AuthUser = { id: string; email: string; name: string | null }
 
 function LogoWordmark() {
   return (
@@ -30,10 +34,11 @@ function LogoWordmark() {
   )
 }
 
-export function Navbar() {
+export function Navbar({ user }: { user?: AuthUser | null }) {
   const t = useTranslations('nav')
   const locale = useLocale()
   const pathname = usePathname()
+  const router = useRouter()
   const [dropdownOpen, setDropdownOpen] = useState(false)
   const dropdownRef = useRef<HTMLDivElement>(null)
 
@@ -54,6 +59,13 @@ export function Navbar() {
     document.addEventListener('mousedown', handleClick)
     return () => document.removeEventListener('mousedown', handleClick)
   }, [])
+
+  async function handleLogout() {
+    await fetch(`${API}/api/auth/logout`, { method: 'POST', credentials: 'include' })
+    router.refresh()
+  }
+
+  const userInitial = user ? (user.name?.[0] ?? user.email[0]).toUpperCase() : null
 
   return (
     <header className={s.nav}>
@@ -103,33 +115,39 @@ export function Navbar() {
       <LocaleSwitcher locale={locale} />
 
       {/* Account */}
-      <div className={s.accountBtn} ref={dropdownRef} onClick={() => setDropdownOpen((v) => !v)}>
-        <div className={s.accountAvatar}>U</div>
-        <span className={s.accountName}>{t('account')}</span>
-        <span className={`${s.chevron} ${dropdownOpen ? s.chevronOpen : ''}`}>
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
-            <path d="m6 9 6 6 6-6"/>
-          </svg>
-        </span>
+      {user ? (
+        <div className={s.accountBtn} ref={dropdownRef} onClick={() => setDropdownOpen((v) => !v)}>
+          <div className={s.accountAvatar}>{userInitial}</div>
+          <span className={s.accountName}>{user.name ?? user.email.split('@')[0]}</span>
+          <span className={`${s.chevron} ${dropdownOpen ? s.chevronOpen : ''}`}>
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+              <path d="m6 9 6 6 6-6"/>
+            </svg>
+          </span>
 
-        {dropdownOpen && (
-          <div className={s.dropdown} onClick={(e) => e.stopPropagation()}>
-            <Link href="/orders" className={s.dropdownItem} onClick={() => setDropdownOpen(false)}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/></svg>
-              {t('myOrders')}
-            </Link>
-            <Link href="/help" className={s.dropdownItem} onClick={() => setDropdownOpen(false)}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
-              {t('helpSupport')}
-            </Link>
-            <div className={s.dropdownDivider} />
-            <div className={`${s.dropdownItem} ${s.dropdownDanger}`}>
-              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
-              {t('signOut')}
+          {dropdownOpen && (
+            <div className={s.dropdown} onClick={(e) => e.stopPropagation()}>
+              <Link href="/orders" className={s.dropdownItem} onClick={() => setDropdownOpen(false)}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 5H7a2 2 0 0 0-2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2h-2"/><rect width="6" height="4" x="9" y="3" rx="1"/></svg>
+                {t('myOrders')}
+              </Link>
+              <Link href="/help" className={s.dropdownItem} onClick={() => setDropdownOpen(false)}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"/><path d="M9.09 9a3 3 0 0 1 5.83 1c0 2-3 3-3 3"/><path d="M12 17h.01"/></svg>
+                {t('helpSupport')}
+              </Link>
+              <div className={s.dropdownDivider} />
+              <button className={`${s.dropdownItem} ${s.dropdownDanger}`} onClick={handleLogout}>
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+                {t('signOut')}
+              </button>
             </div>
-          </div>
-        )}
-      </div>
+          )}
+        </div>
+      ) : (
+        <Link href="/login" className={s.loginBtn}>
+          {t('signIn')}
+        </Link>
+      )}
     </header>
   )
 }
